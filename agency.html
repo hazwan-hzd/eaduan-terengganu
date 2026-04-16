@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eAduan Terengganu - Portal Agensi Kerajaan</title>
+    <meta name="description" content="Portal muat naik laporan untuk agensi kerajaan negeri Terengganu. Muat naik CSV, sambung API, dan pantau status penyegerakan.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" rel="stylesheet">
+    <style>
+        :root {
+            --slate-50: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-200: #e2e8f0;
+            --slate-300: #cbd5e1;
+            --slate-400: #94a3b8;
+            --slate-500: #64748b;
+            --slate-600: #475569;
+            --slate-700: #334155;
+            --slate-800: #1e293b;
+            --slate-900: #0f172a;
+            --blue-50: #eff6ff;
+            --blue-100: #dbeafe;
+            --blue-500: #3b82f6;
+            --blue-600: #2563eb;
+            --blue-700: #1d4ed8;
+            --teal-50: #f0fdfa;
+            --teal-500: #14b8a6;
+            --teal-600: #0d9488;
+            --green-50: #f0fdf4;
+            --green-500: #22c55e;
+            --green-600: #16a34a;
+            --amber-50: #fffbeb;
+            --amber-500: #f59e0b;
+            --red-50: #fef2f2;
+            --red-500: #ef4444;
+            --purple-50: #faf5ff;
+            --purple-500: #a855f7;
+            --purple-600: #9333ea;
+            --radius: 16px;
+            --radius-sm: 12px;
+            --radius-xs: 8px;
+            --shadow: 0 1px 3px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+            --shadow-lg: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { font-size: 15px; scroll-behavior: smooth; }
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--slate-50);
+            color: var(--slate-800);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ---- HEADER ---- */
+        .header {
+            background: linear-gradient(135deg, var(--slate-900) 0%, var(--slate-700) 100%);
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -40%;
+            right: -15%;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: rgba(59,130,246,0.08);
+        }
+        .header-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px 24px;
+        }
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(8px);
+        }
+        .logo-icon .material-symbols-rounded { font-size: 22px; }
+        .logo-text { font-size: 1.1rem; font-weight: 700; }
+        .logo-sub { font-size: 0.7rem; opacity: 0.7; font-weight: 500; }
+        .header-nav { display: flex; gap: 6px; }
+        .header-nav a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .header-nav a:hover { background: rgba(255,255,255,0.1); color: #fff; }
+        .hero-agency {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 24px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .hero-agency h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+        .hero-agency p { opacity: 0.8; font-size: 0.92rem; margin-top: 4px; }
+
+        /* Agency selector */
+        .agency-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,0.1);
+            padding: 10px 16px;
+            border-radius: var(--radius-sm);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .agency-selector select {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+            appearance: none;
+            padding-right: 20px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='white' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0 center;
+        }
+        .agency-selector select option { color: var(--slate-800); background: #fff; }
+        .agency-selector .material-symbols-rounded { font-size: 20px; opacity: 0.7; }
+
+        /* ---- MAIN ---- */
+        .main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 28px 24px 60px;
+        }
+
+        /* ---- STATS ---- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-bottom: 28px;
+        }
+        .stat-card {
+            background: #fff;
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--slate-100);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: all 0.2s;
+        }
+        .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .stat-icon .material-symbols-rounded { font-size: 24px; }
+        .stat-icon.blue { background: var(--blue-50); color: var(--blue-600); }
+        .stat-icon.green { background: var(--green-50); color: var(--green-600); }
+        .stat-icon.purple { background: var(--purple-50); color: var(--purple-600); }
+        .stat-icon.teal { background: var(--teal-50); color: var(--teal-600); }
+        .stat-val { font-size: 1.5rem; font-weight: 800; color: var(--slate-900); display: block; }
+        .stat-label { font-size: 0.78rem; color: var(--slate-500); }
+
+        /* ---- TABS ---- */
+        .section-tabs {
+            display: flex;
+            gap: 4px;
+            background: var(--slate-100);
+            padding: 4px;
+            border-radius: var(--radius-xs);
+            margin-bottom: 20px;
+            width: fit-content;
+        }
+        .sec-tab {
+            padding: 10px 20px;
+            border: none;
+            background: transparent;
+            font-family: inherit;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--slate-500);
+            cursor: pointer;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+        .sec-tab .material-symbols-rounded { font-size: 18px; }
+        .sec-tab:hover { color: var(--slate-700); }
+        .sec-tab.active { background: #fff; color: var(--blue-600); box-shadow: var(--shadow); }
+
+        .sec-panel { display: none; animation: fadeUp 0.3s ease; }
+        .sec-panel.active { display: block; }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ---- CARD ---- */
+        .card {
+            background: #fff;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--slate-100);
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            gap: 12px;
+        }
+        .card-header h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--slate-900);
+        }
+
+        /* ---- CSV UPLOAD ---- */
+        .upload-area {
+            border: 2px dashed var(--slate-200);
+            border-radius: var(--radius);
+            padding: 48px 32px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s;
+            background: var(--slate-50);
+            position: relative;
+        }
+        .upload-area:hover, .upload-area.dragover {
+            border-color: var(--blue-500);
+            background: var(--blue-50);
+        }
+        .upload-area .material-symbols-rounded {
+            font-size: 52px;
+            color: var(--blue-500);
+            margin-bottom: 12px;
+            display: block;
+        }
+        .upload-area h3 { color: var(--slate-700); font-size: 1.1rem; margin-bottom: 6px; }
+        .upload-area p { color: var(--slate-500); font-size: 0.88rem; margin-bottom: 4px; }
+        .upload-area small { color: var(--slate-400); font-size: 0.78rem; }
+        .upload-area input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .upload-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 16px;
+            padding: 10px 24px;
+            background: var(--blue-600);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-xs);
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .upload-btn:hover { background: var(--blue-700); }
+
+        /* Upload result */
+        .upload-result {
+            display: none;
+            margin-top: 20px;
+        }
+        .upload-result.show { display: block; }
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 20px;
+            background: var(--green-50);
+            border: 1px solid rgba(34,197,94,0.2);
+            border-radius: var(--radius-sm);
+            margin-bottom: 16px;
+        }
+        .file-info .material-symbols-rounded { font-size: 28px; color: var(--green-600); }
+        .file-name { font-weight: 700; font-size: 0.95rem; color: var(--slate-800); }
+        .file-meta { font-size: 0.78rem; color: var(--slate-500); }
+
+        /* CSV Preview */
+        .csv-preview {
+            overflow-x: auto;
+            border: 1px solid var(--slate-200);
+            border-radius: var(--radius-sm);
+        }
+        .csv-preview table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+        }
+        .csv-preview th {
+            background: var(--slate-50);
+            padding: 10px 14px;
+            text-align: left;
+            font-weight: 700;
+            color: var(--slate-600);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            border-bottom: 1px solid var(--slate-200);
+            white-space: nowrap;
+        }
+        .csv-preview td {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--slate-100);
+            color: var(--slate-600);
+            white-space: nowrap;
+        }
+        .csv-preview tr:hover td { background: var(--blue-50); }
+
+        /* Mapping */
+        .mapping-grid {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 10px;
+            align-items: center;
+            margin-top: 16px;
+        }
+        .mapping-field {
+            padding: 10px 14px;
+            background: var(--slate-50);
+            border: 1px solid var(--slate-200);
+            border-radius: var(--radius-xs);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--slate-700);
+        }
+        .mapping-arrow {
+            color: var(--slate-400);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .mapping-target {
+            padding: 10px 14px;
+            background: var(--blue-50);
+            border: 1px solid var(--blue-100);
+            border-radius: var(--radius-xs);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--blue-700);
+        }
+
+        .action-bar {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 12px 24px;
+            background: var(--blue-600);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-xs);
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-primary:hover { background: var(--blue-700); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 12px 24px;
+            background: #fff;
+            color: var(--slate-600);
+            border: 1.5px solid var(--slate-200);
+            border-radius: var(--radius-xs);
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-secondary:hover { border-color: var(--slate-300); background: var(--slate-50); }
+
+        /* ---- HISTORY TABLE ---- */
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        .history-table thead th {
+            text-align: left;
+            padding: 10px 14px;
+            font-size: 0.73rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--slate-400);
+            border-bottom: 1px solid var(--slate-200);
+            white-space: nowrap;
+        }
+        .history-table tbody td {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--slate-100);
+            color: var(--slate-600);
+            white-space: nowrap;
+        }
+        .history-table tbody tr:hover td { background: var(--blue-50); }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+        .badge.success { background: var(--green-50); color: var(--green-600); }
+        .badge.error { background: var(--red-50); color: var(--red-500); }
+        .badge.pending { background: var(--amber-50); color: #b45309; }
+        .badge.csv-badge { background: var(--purple-50); color: var(--purple-600); }
+        .badge.api-badge { background: var(--teal-50); color: var(--teal-600); }
+        .mono { font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 0.8rem; }
+
+        /* ---- API SECTION ---- */
+        .api-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 20px;
+            background: var(--slate-50);
+            border: 1px solid var(--slate-200);
+            border-radius: var(--radius-sm);
+            margin-bottom: 10px;
+            transition: all 0.2s;
+        }
+        .api-card:hover { border-color: var(--slate-300); }
+        .api-status {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .api-status.online { background: var(--green-500); box-shadow: 0 0 6px rgba(34,197,94,0.4); }
+        .api-status.offline { background: var(--slate-300); }
+        .api-info { flex: 1; }
+        .api-name { font-weight: 700; font-size: 0.92rem; color: var(--slate-800); }
+        .api-detail { font-size: 0.78rem; color: var(--slate-500); margin-top: 2px; }
+        .api-key-area {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .api-key {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            padding: 6px 12px;
+            background: var(--slate-100);
+            border-radius: 6px;
+            color: var(--slate-600);
+            letter-spacing: 0.02em;
+        }
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: var(--slate-100);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--slate-500);
+            transition: all 0.2s;
+        }
+        .btn-icon:hover { background: var(--slate-200); color: var(--slate-700); }
+        .btn-icon .material-symbols-rounded { font-size: 16px; }
+
+        /* API Docs */
+        .endpoint-list { display: flex; flex-direction: column; gap: 6px; }
+        .endpoint {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            background: var(--slate-50);
+            border-radius: var(--radius-xs);
+            border: 1px solid var(--slate-100);
+        }
+        .endpoint:hover { border-color: var(--slate-200); }
+        .method {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+            min-width: 40px;
+            text-align: center;
+        }
+        .method.get { background: var(--green-50); color: var(--green-600); }
+        .method.post { background: var(--blue-50); color: var(--blue-600); }
+        .method.put { background: var(--amber-50); color: #b45309; }
+        .endpoint code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            color: var(--slate-600);
+        }
+        .endpoint .desc {
+            margin-left: auto;
+            font-size: 0.75rem;
+            color: var(--slate-400);
+        }
+
+        /* Grid layouts */
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+        /* ---- FOOTER ---- */
+        .footer {
+            background: var(--slate-900);
+            color: var(--slate-400);
+            padding: 28px 24px;
+            text-align: center;
+            font-size: 0.82rem;
+        }
+        .footer a { color: var(--blue-500); text-decoration: none; }
+
+        /* ---- TOAST ---- */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--slate-800);
+            color: #fff;
+            padding: 14px 24px;
+            border-radius: var(--radius-sm);
+            font-size: 0.88rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: var(--shadow-lg);
+            z-index: 100;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+        .toast .material-symbols-rounded { font-size: 20px; color: var(--green-500); }
+
+        /* ---- RESPONSIVE ---- */
+        @media (max-width: 768px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .two-col { grid-template-columns: 1fr; }
+            .hero-agency { flex-direction: column; align-items: flex-start; }
+            .header-nav { display: none; }
+            .section-tabs { width: 100%; overflow-x: auto; }
+            .mapping-grid { grid-template-columns: 1fr; }
+            .mapping-arrow { transform: rotate(90deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-inner">
+            <div class="header-top">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <span class="material-symbols-rounded">admin_panel_settings</span>
+                    </div>
+                    <div>
+                        <div class="logo-text">eAduan Terengganu</div>
+                        <div class="logo-sub">Portal Agensi Kerajaan</div>
+                    </div>
+                </div>
+                <nav class="header-nav">
+                    <a href="aduan.html">Portal Rakyat</a>
+                    <a href="index.html">Dashboard Pentadbir</a>
+                </nav>
+            </div>
+            <div class="hero-agency">
+                <div>
+                    <h1>Portal Pengurusan Agensi</h1>
+                    <p>Muat naik laporan aduan, sambung sistem melalui API, dan pantau status penyegerakan.</p>
+                </div>
+                <div class="agency-selector">
+                    <span class="material-symbols-rounded">apartment</span>
+                    <select id="agencySelect">
+                        <option value="MBKT">Majlis Bandaraya Kuala Terengganu</option>
+                        <option value="MPK">Majlis Perbandaran Kemaman</option>
+                        <option value="MPD">Majlis Perbandaran Dungun</option>
+                        <option value="MDM">Majlis Daerah Marang</option>
+                        <option value="MDHT">Majlis Daerah Hulu Terengganu</option>
+                        <option value="MDS">Majlis Daerah Setiu</option>
+                        <option value="MDB">Majlis Daerah Besut</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon blue"><span class="material-symbols-rounded">upload_file</span></div>
+                <div>
+                    <span class="stat-val">47</span>
+                    <span class="stat-label">Muat Naik Bulan Ini</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green"><span class="material-symbols-rounded">check_circle</span></div>
+                <div>
+                    <span class="stat-val">4,328</span>
+                    <span class="stat-label">Rekod Berjaya Dihantar</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon purple"><span class="material-symbols-rounded">sync</span></div>
+                <div>
+                    <span class="stat-val">99.7%</span>
+                    <span class="stat-label">Kadar Kejayaan</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon teal"><span class="material-symbols-rounded">schedule</span></div>
+                <div>
+                    <span class="stat-val">2 min</span>
+                    <span class="stat-label">Sinkron Terakhir</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Tabs -->
+        <div class="section-tabs">
+            <button class="sec-tab active" data-tab="upload">
+                <span class="material-symbols-rounded">cloud_upload</span>
+                Muat Naik CSV
+            </button>
+            <button class="sec-tab" data-tab="api">
+                <span class="material-symbols-rounded">api</span>
+                Sambungan API
+            </button>
+            <button class="sec-tab" data-tab="history">
+                <span class="material-symbols-rounded">history</span>
+                Sejarah
+            </button>
+        </div>
+
+        <!-- ======= TAB: CSV UPLOAD ======= -->
+        <div class="sec-panel active" id="panel-upload">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Muat Naik Laporan CSV</h3>
+                    <a href="#" style="color:var(--blue-600);font-size:0.85rem;font-weight:600;text-decoration:none;">Muat Turun Template CSV &darr;</a>
+                </div>
+
+                <div class="upload-area" id="uploadArea">
+                    <input type="file" accept=".csv" id="csvInput">
+                    <span class="material-symbols-rounded">cloud_upload</span>
+                    <h3>Seret fail CSV ke sini</h3>
+                    <p>atau klik untuk pilih fail dari komputer anda</p>
+                    <small>Format CSV (UTF-8) - Maksimum 50MB - Satu fail pada satu masa</small>
+                    <button class="upload-btn" type="button">
+                        <span class="material-symbols-rounded" style="font-size:18px;">folder_open</span>
+                        Pilih Fail
+                    </button>
+                </div>
+
+                <!-- Upload Result (shown after file selected) -->
+                <div class="upload-result" id="uploadResult">
+                    <div class="file-info">
+                        <span class="material-symbols-rounded">description</span>
+                        <div>
+                            <div class="file-name" id="fileName">aduan-mbkt-april-2026.csv</div>
+                            <div class="file-meta" id="fileMeta">287 baris - 42 KB - dimuat naik 16/04/2026 10:45 MYT</div>
+                        </div>
+                    </div>
+
+                    <h4 style="font-size:0.9rem;font-weight:700;margin-bottom:12px;color:var(--slate-700);">Pratonton Data (5 baris pertama)</h4>
+                    <div class="csv-preview">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>complaint_id</th>
+                                    <th>complainant</th>
+                                    <th>district</th>
+                                    <th>category</th>
+                                    <th>description</th>
+                                    <th>status</th>
+                                    <th>created_at</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="mono">MBKT-001</td>
+                                    <td>Ahmad bin Hassan</td>
+                                    <td>Kuala Terengganu</td>
+                                    <td>Infrastruktur</td>
+                                    <td>Jalan berlubang di Jalan Sultan</td>
+                                    <td>Dalam Tindakan</td>
+                                    <td>2026-04-01</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono">MBKT-002</td>
+                                    <td>Siti binti Yusof</td>
+                                    <td>Kuala Terengganu</td>
+                                    <td>Kebersihan</td>
+                                    <td>Sampah bertimbun di Lorong 5</td>
+                                    <td>Baru</td>
+                                    <td>2026-04-02</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono">MBKT-003</td>
+                                    <td>Mohd bin Razak</td>
+                                    <td>Kuala Terengganu</td>
+                                    <td>Bekalan Air</td>
+                                    <td>Paip pecah di Taman Maju</td>
+                                    <td>Selesai</td>
+                                    <td>2026-04-03</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono">MBKT-004</td>
+                                    <td>Nurul binti Salleh</td>
+                                    <td>Kuala Terengganu</td>
+                                    <td>Banjir</td>
+                                    <td>Banjir kilat kawasan rendah</td>
+                                    <td>Dalam Tindakan</td>
+                                    <td>2026-04-04</td>
+                                </tr>
+                                <tr>
+                                    <td class="mono">MBKT-005</td>
+                                    <td>Hafiz bin Omar</td>
+                                    <td>Kuala Terengganu</td>
+                                    <td>Elektrik</td>
+                                    <td>Lampu jalan tidak berfungsi</td>
+                                    <td>Baru</td>
+                                    <td>2026-04-05</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4 style="font-size:0.9rem;font-weight:700;margin:20px 0 12px;color:var(--slate-700);">Pemetaan Lajur</h4>
+                    <div class="mapping-grid">
+                        <div class="mapping-field">complaint_id</div>
+                        <div class="mapping-arrow"><span class="material-symbols-rounded">arrow_forward</span></div>
+                        <div class="mapping-target">id_aduan</div>
+
+                        <div class="mapping-field">complainant</div>
+                        <div class="mapping-arrow"><span class="material-symbols-rounded">arrow_forward</span></div>
+                        <div class="mapping-target">nama_pengadu</div>
+
+                        <div class="mapping-field">district</div>
+                        <div class="mapping-arrow"><span class="material-symbols-rounded">arrow_forward</span></div>
+                        <div class="mapping-target">daerah</div>
+
+                        <div class="mapping-field">category</div>
+                        <div class="mapping-arrow"><span class="material-symbols-rounded">arrow_forward</span></div>
+                        <div class="mapping-target">kategori</div>
+
+                        <div class="mapping-field">description</div>
+                        <div class="mapping-arrow"><span class="material-symbols-rounded">arrow_forward</span></div>
+                        <div class="mapping-target">butiran</div>
+
+                        <div class="mapping-field">status</div>
+                        <div class="mapping-arrow"><span class="material-symbols-rounded">arrow_forward</span></div>
+                        <div class="mapping-target">status_aduan</div>
+
+                        <div class="mapping-field">created_at</div>
+                        <div class="mapping-arrow"><span class="material-symbols-rounded">arrow_forward</span></div>
+                        <div class="mapping-target">tarikh_cipta</div>
+                    </div>
+
+                    <div class="action-bar">
+                        <button class="btn-secondary" onclick="resetUpload()">
+                            <span class="material-symbols-rounded" style="font-size:18px;">close</span>
+                            Batal
+                        </button>
+                        <button class="btn-primary" onclick="submitUpload()">
+                            <span class="material-symbols-rounded" style="font-size:18px;">cloud_upload</span>
+                            Hantar 287 Rekod
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Guide -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Panduan Format CSV</h3>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+                    <div style="padding:16px;background:var(--blue-50);border-radius:var(--radius-sm);text-align:center;">
+                        <span class="material-symbols-rounded" style="font-size:28px;color:var(--blue-600);display:block;margin-bottom:8px;">looks_one</span>
+                        <strong style="font-size:0.88rem;">Muat Turun Template</strong>
+                        <p style="font-size:0.78rem;color:var(--slate-500);margin-top:4px;">Gunakan template CSV yang disediakan untuk memastikan format yang betul.</p>
+                    </div>
+                    <div style="padding:16px;background:var(--teal-50);border-radius:var(--radius-sm);text-align:center;">
+                        <span class="material-symbols-rounded" style="font-size:28px;color:var(--teal-600);display:block;margin-bottom:8px;">looks_two</span>
+                        <strong style="font-size:0.88rem;">Isi Data Aduan</strong>
+                        <p style="font-size:0.78rem;color:var(--slate-500);margin-top:4px;">Masukkan data aduan mengikut lajur yang ditetapkan. Pastikan tiada baris kosong.</p>
+                    </div>
+                    <div style="padding:16px;background:var(--green-50);border-radius:var(--radius-sm);text-align:center;">
+                        <span class="material-symbols-rounded" style="font-size:28px;color:var(--green-600);display:block;margin-bottom:8px;">looks_3</span>
+                        <strong style="font-size:0.88rem;">Muat Naik & Sahkan</strong>
+                        <p style="font-size:0.78rem;color:var(--slate-500);margin-top:4px;">Semak pratonton data sebelum menghantar. Sistem akan memetakan lajur secara automatik.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======= TAB: API ======= -->
+        <div class="sec-panel" id="panel-api">
+            <div class="two-col">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Sambungan API Anda</h3>
+                        <button class="btn-primary" style="padding:8px 16px;font-size:0.82rem;">
+                            <span class="material-symbols-rounded" style="font-size:16px;">refresh</span>
+                            Uji Sambungan
+                        </button>
+                    </div>
+                    <div class="api-card">
+                        <div class="api-status online"></div>
+                        <div class="api-info">
+                            <div class="api-name">REST API v2.1</div>
+                            <div class="api-detail">Endpoints aktif - Terakhir disinkronkan 2 minit lalu</div>
+                        </div>
+                    </div>
+                    <div style="margin-top:16px;">
+                        <div style="font-size:0.85rem;font-weight:700;color:var(--slate-700);margin-bottom:8px;">Kunci API Anda</div>
+                        <div class="api-key-area">
+                            <div class="api-key" id="apiKeyDisplay">ea_live_sk_****************************3f7a</div>
+                            <button class="btn-icon" onclick="toggleKey()" title="Tunjuk/Sembunyi"><span class="material-symbols-rounded">visibility</span></button>
+                            <button class="btn-icon" onclick="copyKey()" title="Salin"><span class="material-symbols-rounded">content_copy</span></button>
+                        </div>
+                    </div>
+                    <div style="margin-top:16px;">
+                        <div style="font-size:0.85rem;font-weight:700;color:var(--slate-700);margin-bottom:8px;">Base URL</div>
+                        <div class="api-key" style="width:fit-content;">https://api.eaduan-terengganu.gov.my/v1</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>API Endpoints</h3>
+                    </div>
+                    <div class="endpoint-list">
+                        <div class="endpoint">
+                            <span class="method post">POST</span>
+                            <code>/aduan</code>
+                            <span class="desc">Hantar aduan baru</span>
+                        </div>
+                        <div class="endpoint">
+                            <span class="method post">POST</span>
+                            <code>/aduan/batch</code>
+                            <span class="desc">Hantar banyak aduan</span>
+                        </div>
+                        <div class="endpoint">
+                            <span class="method get">GET</span>
+                            <code>/aduan</code>
+                            <span class="desc">Senarai aduan agensi</span>
+                        </div>
+                        <div class="endpoint">
+                            <span class="method get">GET</span>
+                            <code>/aduan/{id}</code>
+                            <span class="desc">Status aduan individu</span>
+                        </div>
+                        <div class="endpoint">
+                            <span class="method put">PUT</span>
+                            <code>/aduan/{id}/status</code>
+                            <span class="desc">Kemaskini status</span>
+                        </div>
+                        <div class="endpoint">
+                            <span class="method post">POST</span>
+                            <code>/csv/import</code>
+                            <span class="desc">Muat naik CSV via API</span>
+                        </div>
+                        <div class="endpoint">
+                            <span class="method get">GET</span>
+                            <code>/csv/export</code>
+                            <span class="desc">Eksport data ke CSV</span>
+                        </div>
+                        <div class="endpoint">
+                            <span class="method post">POST</span>
+                            <code>/webhook</code>
+                            <span class="desc">Daftar webhook</span>
+                        </div>
+                    </div>
+                    <div style="text-align:center;margin-top:16px;">
+                        <a href="#" style="color:var(--blue-600);font-size:0.85rem;font-weight:600;text-decoration:none;">Buka Dokumentasi Penuh API &rarr;</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======= TAB: HISTORY ======= -->
+        <div class="sec-panel" id="panel-history">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Sejarah Muat Naik & Penyegerakan</h3>
+                    <button class="btn-secondary" style="padding:8px 16px;font-size:0.82rem;">
+                        <span class="material-symbols-rounded" style="font-size:16px;">download</span>
+                        Eksport Log
+                    </button>
+                </div>
+                <div style="overflow-x:auto;">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Tarikh & Masa</th>
+                                <th>Fail / Sumber</th>
+                                <th>Jenis</th>
+                                <th>Rekod</th>
+                                <th>Berjaya</th>
+                                <th>Gagal</th>
+                                <th>Status</th>
+                                <th>Tempoh</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>16/04/2026 10:24</td>
+                                <td class="mono">aduan-april-batch3.csv</td>
+                                <td><span class="badge csv-badge">CSV</span></td>
+                                <td>14</td>
+                                <td>14</td>
+                                <td>0</td>
+                                <td><span class="badge success">Berjaya</span></td>
+                                <td>1.2s</td>
+                            </tr>
+                            <tr>
+                                <td>15/04/2026 15:00</td>
+                                <td class="mono">REST API Sync</td>
+                                <td><span class="badge api-badge">API</span></td>
+                                <td>23</td>
+                                <td>23</td>
+                                <td>0</td>
+                                <td><span class="badge success">Berjaya</span></td>
+                                <td>0.8s</td>
+                            </tr>
+                            <tr>
+                                <td>15/04/2026 09:15</td>
+                                <td class="mono">aduan-april-batch2.csv</td>
+                                <td><span class="badge csv-badge">CSV</span></td>
+                                <td>156</td>
+                                <td>154</td>
+                                <td>2</td>
+                                <td><span class="badge pending">Separa</span></td>
+                                <td>4.7s</td>
+                            </tr>
+                            <tr>
+                                <td>14/04/2026 10:00</td>
+                                <td class="mono">REST API Sync</td>
+                                <td><span class="badge api-badge">API</span></td>
+                                <td>8</td>
+                                <td>8</td>
+                                <td>0</td>
+                                <td><span class="badge success">Berjaya</span></td>
+                                <td>0.5s</td>
+                            </tr>
+                            <tr>
+                                <td>12/04/2026 14:30</td>
+                                <td class="mono">aduan-april-batch1.csv</td>
+                                <td><span class="badge csv-badge">CSV</span></td>
+                                <td>287</td>
+                                <td>287</td>
+                                <td>0</td>
+                                <td><span class="badge success">Berjaya</span></td>
+                                <td>6.1s</td>
+                            </tr>
+                            <tr>
+                                <td>10/04/2026 09:00</td>
+                                <td class="mono">laporan-mac-penuh.csv</td>
+                                <td><span class="badge csv-badge">CSV</span></td>
+                                <td>412</td>
+                                <td>0</td>
+                                <td>412</td>
+                                <td><span class="badge error">Gagal</span></td>
+                                <td>- (format salah)</td>
+                            </tr>
+                            <tr>
+                                <td>08/04/2026 11:20</td>
+                                <td class="mono">REST API Sync</td>
+                                <td><span class="badge api-badge">API</span></td>
+                                <td>45</td>
+                                <td>45</td>
+                                <td>0</td>
+                                <td><span class="badge success">Berjaya</span></td>
+                                <td>1.4s</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        <p><strong>eAduan Terengganu</strong> - Portal Agensi Kerajaan</p>
+        <p style="margin-top:6px;">&copy; 2026 Kerajaan Negeri Terengganu. Dikuasakan oleh <a href="https://neuramerge.com">Neuramerge</a>.</p>
+    </footer>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <span class="material-symbols-rounded">check_circle</span>
+        <span id="toastMsg">287 rekod berjaya dimuat naik!</span>
+    </div>
+
+    <script>
+        // Tab switching
+        document.querySelectorAll('.sec-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.sec-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.sec-panel').forEach(p => p.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+            });
+        });
+
+        // File upload simulation
+        const csvInput = document.getElementById('csvInput');
+        const uploadArea = document.getElementById('uploadArea');
+        const uploadResult = document.getElementById('uploadResult');
+
+        csvInput.addEventListener('change', () => {
+            if (csvInput.files.length > 0) {
+                const file = csvInput.files[0];
+                document.getElementById('fileName').textContent = file.name;
+                document.getElementById('fileMeta').textContent =
+                    `${Math.floor(Math.random() * 400 + 50)} baris - ${(file.size / 1024).toFixed(1)} KB - dimuat naik ${new Date().toLocaleString('ms-MY')}`;
+                uploadArea.style.display = 'none';
+                uploadResult.classList.add('show');
+            }
+        });
+
+        // Drag and drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+        uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            if (e.dataTransfer.files.length > 0) {
+                csvInput.files = e.dataTransfer.files;
+                csvInput.dispatchEvent(new Event('change'));
+            }
+        });
+
+        function resetUpload() {
+            uploadArea.style.display = '';
+            uploadResult.classList.remove('show');
+            csvInput.value = '';
+        }
+
+        function submitUpload() {
+            showToast('287 rekod berjaya dimuat naik ke sistem eAduan!');
+            resetUpload();
+        }
+
+        // Toast
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 4000);
+        }
+
+        // API Key toggle
+        let keyVisible = false;
+        function toggleKey() {
+            keyVisible = !keyVisible;
+            document.getElementById('apiKeyDisplay').textContent = keyVisible
+                ? 'ea_live_sk_7f8g2h4j6k8l0m2n4p6q8r0s2t4v6w8x3f7a'
+                : 'ea_live_sk_****************************3f7a';
+        }
+
+        function copyKey() {
+            navigator.clipboard.writeText('ea_live_sk_7f8g2h4j6k8l0m2n4p6q8r0s2t4v6w8x3f7a');
+            showToast('Kunci API berjaya disalin!');
+        }
+    </script>
+</body>
+</html>
