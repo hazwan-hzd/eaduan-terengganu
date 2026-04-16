@@ -401,6 +401,64 @@
             color: #dc2626;
         }
 
+        /* Grid Selector */
+        .grid-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 12px;
+        }
+        .grid-selector.pill-grid {
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+        }
+        .grid-opt { cursor: pointer; }
+        .grid-opt input { display: none; }
+        .grid-card {
+            border: 1.5px solid var(--gray-200);
+            border-radius: var(--radius-xs);
+            padding: 16px 12px;
+            text-align: center;
+            transition: all 0.2s;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            height: 100%;
+        }
+        .grid-card .material-symbols-rounded { font-size: 28px; color: var(--gray-500); transition: all 0.2s; }
+        .grid-card span { font-size: 0.85rem; font-weight: 600; color: var(--gray-700); line-height: 1.25; }
+        .grid-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); border-color: var(--blue-200); }
+        .grid-opt input:checked + .grid-card {
+            border-color: var(--blue-600);
+            background: var(--blue-50);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+        }
+        .grid-opt input:checked + .grid-card .material-symbols-rounded,
+        .grid-opt input:checked + .grid-card span { color: var(--blue-700); }
+        
+        /* Pill selector */
+        .pill-card {
+            border: 1.5px solid var(--gray-200);
+            border-radius: 20px;
+            padding: 10px 16px;
+            text-align: center;
+            transition: all 0.2s;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+        .pill-card:hover { border-color: var(--blue-200); background: var(--blue-50); }
+        .grid-opt input:checked + .pill-card {
+            border-color: var(--blue-600);
+            background: var(--blue-600);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
         /* Submit button */
         .btn-submit {
             width: 100%;
@@ -767,32 +825,30 @@
                             Butiran Aduan
                         </div>
                         <div class="form-grid">
-                            <div class="form-group">
+                            <div class="form-group full">
                                 <label>Daerah <span class="required">*</span></label>
-                                <select required id="inputDistrict">
-                                    <option value="">Pilih daerah anda...</option>
-                                    <option value="kuala-terengganu">Kuala Terengganu</option>
-                                    <option value="kemaman">Kemaman</option>
-                                    <option value="dungun">Dungun</option>
-                                    <option value="marang">Marang</option>
-                                    <option value="hulu-terengganu">Hulu Terengganu</option>
-                                    <option value="setiu">Setiu</option>
-                                    <option value="besut">Besut</option>
-                                </select>
+                                <div class="grid-selector pill-grid">
+                                    <label class="grid-opt"><input type="radio" name="district" value="kuala-terengganu" required><div class="pill-card">Kuala Terengganu</div></label>
+                                    <label class="grid-opt"><input type="radio" name="district" value="kemaman"><div class="pill-card">Kemaman</div></label>
+                                    <label class="grid-opt"><input type="radio" name="district" value="dungun"><div class="pill-card">Dungun</div></label>
+                                    <label class="grid-opt"><input type="radio" name="district" value="marang"><div class="pill-card">Marang</div></label>
+                                    <label class="grid-opt"><input type="radio" name="district" value="hulu-terengganu"><div class="pill-card">Hulu Terengganu</div></label>
+                                    <label class="grid-opt"><input type="radio" name="district" value="setiu"><div class="pill-card">Setiu</div></label>
+                                    <label class="grid-opt"><input type="radio" name="district" value="besut"><div class="pill-card">Besut</div></label>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label>Kategori <span class="required">*</span></label>
-                                <select required id="inputCategory">
-                                    <option value="">Pilih kategori...</option>
-                                    <option value="infra">Jalan & Infrastruktur</option>
-                                    <option value="water">Bekalan Air</option>
-                                    <option value="electric">Bekalan Elektrik</option>
-                                    <option value="housing">Perumahan</option>
-                                    <option value="environment">Alam Sekitar</option>
-                                    <option value="safety">Keselamatan Awam</option>
-                                    <option value="cleanliness">Kebersihan</option>
-                                    <option value="flood">Banjir</option>
-                                </select>
+                            <div class="form-group full">
+                                <label>Kategori Masalah <span class="required">*</span></label>
+                                <div class="grid-selector">
+                                    <label class="grid-opt"><input type="radio" name="category" value="infra" required><div class="grid-card"><span class="material-symbols-rounded">edit_road</span><span>Jalan & Infrastruktur</span></div></label>
+                                    <label class="grid-opt"><input type="radio" name="category" value="water"><div class="grid-card"><span class="material-symbols-rounded">water_drop</span><span>Bekalan Air</span></div></label>
+                                    <label class="grid-opt"><input type="radio" name="category" value="electric"><div class="grid-card"><span class="material-symbols-rounded">electric_bolt</span><span>Bekalan Elektrik</span></div></label>
+                                    <label class="grid-opt"><input type="radio" name="category" value="housing"><div class="grid-card"><span class="material-symbols-rounded">home</span><span>Perumahan</span></div></label>
+                                    <label class="grid-opt"><input type="radio" name="category" value="environment"><div class="grid-card"><span class="material-symbols-rounded">forest</span><span>Alam Sekitar</span></div></label>
+                                    <label class="grid-opt"><input type="radio" name="category" value="safety"><div class="grid-card"><span class="material-symbols-rounded">local_police</span><span>Keselamatan Awam</span></div></label>
+                                    <label class="grid-opt"><input type="radio" name="category" value="cleanliness"><div class="grid-card"><span class="material-symbols-rounded">delete</span><span>Kebersihan</span></div></label>
+                                    <label class="grid-opt"><input type="radio" name="category" value="flood"><div class="grid-card"><span class="material-symbols-rounded">flood</span><span>Banjir & Bencana</span></div></label>
+                                </div>
                             </div>
                             <div class="form-group full">
                                 <label>Lokasi Tepat <span class="required">*</span></label>
