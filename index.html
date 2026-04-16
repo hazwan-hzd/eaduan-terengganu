@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eAduan Terengganu - Sistem Pengurusan Aduan Bersepadu</title>
+    <meta name="description" content="Sistem pengurusan aduan bersepadu negeri Terengganu. Platform aduan awam multi-agensi dengan integrasi API dan CSV.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon">
+                <span class="material-symbols-rounded">shield</span>
+            </div>
+            <div class="brand-text">
+                <span class="brand-name">eAduan</span>
+                <span class="brand-sub">Terengganu</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-view="dashboard" id="nav-dashboard">
+                <span class="material-symbols-rounded">dashboard</span>
+                <span class="nav-label">Dashboard</span>
+            </a>
+            <a href="#" class="nav-item" data-view="portal" id="nav-portal">
+                <span class="material-symbols-rounded">edit_note</span>
+                <span class="nav-label">Aduan Portal</span>
+            </a>
+            <a href="#" class="nav-item" data-view="operations" id="nav-operations">
+                <span class="material-symbols-rounded">assignment</span>
+                <span class="nav-label">Operations</span>
+            </a>
+            <a href="#" class="nav-item" data-view="analytics" id="nav-analytics">
+                <span class="material-symbols-rounded">monitoring</span>
+                <span class="nav-label">Analytics</span>
+            </a>
+            <a href="#" class="nav-item" data-view="integrations" id="nav-integrations">
+                <span class="material-symbols-rounded">hub</span>
+                <span class="nav-label">Integrations</span>
+                <span class="nav-badge">7</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-avatar">HA</div>
+            <div class="user-info">
+                <span class="user-name">Admin Hazwan</span>
+                <span class="user-role">State Administrator</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- Top Bar -->
+        <header class="topbar">
+            <button class="menu-toggle" id="menuToggle">
+                <span class="material-symbols-rounded">menu</span>
+            </button>
+            <div class="topbar-search">
+                <span class="material-symbols-rounded">search</span>
+                <input type="text" placeholder="Cari aduan, agensi, atau ID kes..." id="globalSearch">
+            </div>
+            <div class="topbar-actions">
+                <button class="topbar-btn" id="notifBtn">
+                    <span class="material-symbols-rounded">notifications</span>
+                    <span class="notif-dot"></span>
+                </button>
+                <div class="live-indicator">
+                    <span class="live-dot"></span>
+                    <span>LIVE</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- ============ VIEW: DASHBOARD ============ -->
+        <section class="view active" id="view-dashboard">
+            <div class="view-header">
+                <div>
+                    <h1>Dashboard Utama</h1>
+                    <p class="view-subtitle">Paparan umum sistem aduan negeri Terengganu</p>
+                </div>
+                <div class="header-actions">
+                    <select class="filter-select" id="dashPeriod">
+                        <option value="today">Hari Ini</option>
+                        <option value="week" selected>Minggu Ini</option>
+                        <option value="month">Bulan Ini</option>
+                        <option value="quarter">Suku Tahun</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- KPI Cards -->
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-icon kpi-blue">
+                        <span class="material-symbols-rounded">inbox</span>
+                    </div>
+                    <div class="kpi-body">
+                        <span class="kpi-value" id="kpiTotal">1,247</span>
+                        <span class="kpi-label">Jumlah Aduan</span>
+                    </div>
+                    <div class="kpi-trend up">
+                        <span class="material-symbols-rounded">trending_up</span>
+                        <span>+12.3%</span>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon kpi-amber">
+                        <span class="material-symbols-rounded">pending_actions</span>
+                    </div>
+                    <div class="kpi-body">
+                        <span class="kpi-value" id="kpiPending">342</span>
+                        <span class="kpi-label">Dalam Tindakan</span>
+                    </div>
+                    <div class="kpi-trend down">
+                        <span class="material-symbols-rounded">trending_down</span>
+                        <span>-5.1%</span>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon kpi-green">
+                        <span class="material-symbols-rounded">check_circle</span>
+                    </div>
+                    <div class="kpi-body">
+                        <span class="kpi-value" id="kpiResolved">871</span>
+                        <span class="kpi-label">Selesai</span>
+                    </div>
+                    <div class="kpi-trend up">
+                        <span class="material-symbols-rounded">trending_up</span>
+                        <span>+8.7%</span>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon kpi-cyan">
+                        <span class="material-symbols-rounded">timer</span>
+                    </div>
+                    <div class="kpi-body">
+                        <span class="kpi-value" id="kpiAvgDays">3.2 <small>hari</small></span>
+                        <span class="kpi-label">Purata Penyelesaian</span>
+                    </div>
+                    <div class="kpi-trend up">
+                        <span class="material-symbols-rounded">trending_up</span>
+                        <span>Lebih pantas</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Body -->
+            <div class="dash-grid">
+                <!-- Trend Chart -->
+                <div class="card card-wide">
+                    <div class="card-header">
+                        <h3>Tren Aduan (30 Hari)</h3>
+                        <div class="chart-legend">
+                            <span class="legend-dot blue"></span> Masuk
+                            <span class="legend-dot green"></span> Selesai
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Category Breakdown -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Kategori Aduan</h3>
+                    </div>
+                    <div class="chart-container chart-sm">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Agency Performance -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Prestasi Agensi</h3>
+                    </div>
+                    <div class="agency-list" id="agencyList">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Recent Complaints -->
+                <div class="card card-wide">
+                    <div class="card-header">
+                        <h3>Aduan Terkini</h3>
+                        <button class="btn-ghost" onclick="switchView('operations')">Lihat Semua</button>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="data-table" id="recentTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Aduan</th>
+                                    <th>Daerah</th>
+                                    <th>Agensi</th>
+                                    <th>Status</th>
+                                    <th>Tarikh</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentBody">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Integration Status Mini -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Status Integrasi</h3>
+                        <button class="btn-ghost" onclick="switchView('integrations')">Urus</button>
+                    </div>
+                    <div class="integration-mini" id="integrationMini">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ VIEW: ADUAN PORTAL ============ -->
+        <section class="view" id="view-portal">
+            <div class="view-header">
+                <div>
+                    <h1>Portal Aduan Awam</h1>
+                    <p class="view-subtitle">Hantar aduan anda - kami akan jejak sehingga selesai</p>
+                </div>
+            </div>
+
+            <div class="portal-layout">
+                <div class="card portal-form-card">
+                    <div class="card-header">
+                        <h3>Borang Aduan Baru</h3>
+                    </div>
+                    <form id="complaintForm" class="complaint-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="complaintName">Nama Penuh</label>
+                                <input type="text" id="complaintName" placeholder="cth. Ahmad bin Abu" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="complaintPhone">No. Telefon</label>
+                                <input type="tel" id="complaintPhone" placeholder="cth. 0139876543" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="complaintDistrict">Daerah</label>
+                                <select id="complaintDistrict" required>
+                                    <option value="">Pilih daerah...</option>
+                                    <option value="kuala-terengganu">Kuala Terengganu</option>
+                                    <option value="kemaman">Kemaman</option>
+                                    <option value="dungun">Dungun</option>
+                                    <option value="marang">Marang</option>
+                                    <option value="hulu-terengganu">Hulu Terengganu</option>
+                                    <option value="setiu">Setiu</option>
+                                    <option value="besut">Besut</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="complaintCategory">Kategori</label>
+                                <select id="complaintCategory" required>
+                                    <option value="">Pilih kategori...</option>
+                                    <option value="infra">Jalan & Infrastruktur</option>
+                                    <option value="water">Bekalan Air</option>
+                                    <option value="electric">Bekalan Elektrik</option>
+                                    <option value="housing">Perumahan</option>
+                                    <option value="environment">Alam Sekitar</option>
+                                    <option value="safety">Keselamatan Awam</option>
+                                    <option value="cleanliness">Kebersihan</option>
+                                    <option value="flood">Banjir</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="complaintLocation">Lokasi Tepat</label>
+                            <input type="text" id="complaintLocation" placeholder="cth. Jalan Sultan Mahmud, depan Masjid Abidin">
+                        </div>
+                        <div class="form-group">
+                            <label for="complaintDesc">Butiran Aduan</label>
+                            <textarea id="complaintDesc" rows="5" placeholder="Terangkan masalah anda dengan jelas..." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Lampiran Bukti (gambar/video)</label>
+                            <div class="upload-zone" id="uploadZone">
+                                <span class="material-symbols-rounded">cloud_upload</span>
+                                <p>Seret fail ke sini atau <strong>klik untuk muat naik</strong></p>
+                                <small>JPG, PNG, MP4 - Maks 10MB setiap fail</small>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="complaintPriority">Tahap Keutamaan</label>
+                            <div class="priority-selector">
+                                <label class="priority-option">
+                                    <input type="radio" name="priority" value="low">
+                                    <span class="priority-badge low">Rendah</span>
+                                </label>
+                                <label class="priority-option">
+                                    <input type="radio" name="priority" value="medium" checked>
+                                    <span class="priority-badge medium">Sederhana</span>
+                                </label>
+                                <label class="priority-option">
+                                    <input type="radio" name="priority" value="high">
+                                    <span class="priority-badge high">Tinggi</span>
+                                </label>
+                                <label class="priority-option">
+                                    <input type="radio" name="priority" value="critical">
+                                    <span class="priority-badge critical">Kritikal</span>
+                                </label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary btn-lg" id="submitComplaint">
+                            <span class="material-symbols-rounded">send</span>
+                            Hantar Aduan
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Complaint Tracker -->
+                <div class="portal-sidebar">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Jejak Aduan Anda</h3>
+                        </div>
+                        <div class="tracker-search">
+                            <input type="text" placeholder="Masukkan ID aduan anda..." id="trackerId">
+                            <button class="btn-primary" id="trackBtn">Jejak</button>
+                        </div>
+                        <div class="tracker-result" id="trackerResult">
+                            <div class="tracker-placeholder">
+                                <span class="material-symbols-rounded">travel_explore</span>
+                                <p>Masukkan ID aduan untuk melihat status terkini</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Panduan Pengguna</h3>
+                        </div>
+                        <div class="guide-steps">
+                            <div class="guide-step">
+                                <div class="step-num">1</div>
+                                <div>
+                                    <strong>Isi Borang</strong>
+                                    <p>Lengkapkan maklumat aduan</p>
+                                </div>
+                            </div>
+                            <div class="guide-step">
+                                <div class="step-num">2</div>
+                                <div>
+                                    <strong>Hantar</strong>
+                                    <p>Terima ID aduan unik</p>
+                                </div>
+                            </div>
+                            <div class="guide-step">
+                                <div class="step-num">3</div>
+                                <div>
+                                    <strong>Jejak</strong>
+                                    <p>Pantau status secara langsung</p>
+                                </div>
+                            </div>
+                            <div class="guide-step">
+                                <div class="step-num">4</div>
+                                <div>
+                                    <strong>Selesai</strong>
+                                    <p>Terima pemberitahuan penyelesaian</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ VIEW: OPERATIONS ============ -->
+        <section class="view" id="view-operations">
+            <div class="view-header">
+                <div>
+                    <h1>Pusat Operasi</h1>
+                    <p class="view-subtitle">Urus, tapis, dan tindakan aduan</p>
+                </div>
+                <div class="header-actions">
+                    <select class="filter-select" id="opsAgencyFilter">
+                        <option value="all">Semua Agensi</option>
+                        <option value="MBKT">MBKT</option>
+                        <option value="MPK">MPK Kemaman</option>
+                        <option value="MPD">MPD Dungun</option>
+                        <option value="MDM">MD Marang</option>
+                        <option value="MDHT">MD Hulu Terengganu</option>
+                        <option value="MDS">MD Setiu</option>
+                        <option value="MDB">MD Besut</option>
+                    </select>
+                    <select class="filter-select" id="opsStatusFilter">
+                        <option value="all">Semua Status</option>
+                        <option value="new">Baru</option>
+                        <option value="assigned">Ditugaskan</option>
+                        <option value="in-progress">Dalam Tindakan</option>
+                        <option value="resolved">Selesai</option>
+                        <option value="escalated">Dieskalaikan</option>
+                    </select>
+                    <button class="btn-primary" id="exportCsvBtn">
+                        <span class="material-symbols-rounded">download</span>
+                        Eksport CSV
+                    </button>
+                </div>
+            </div>
+
+            <!-- Operations Stats Bar -->
+            <div class="ops-stats">
+                <div class="ops-stat">
+                    <span class="ops-stat-val" id="opsNew">34</span>
+                    <span class="ops-stat-label">Baru</span>
+                </div>
+                <div class="ops-stat">
+                    <span class="ops-stat-val" id="opsAssigned">89</span>
+                    <span class="ops-stat-label">Ditugaskan</span>
+                </div>
+                <div class="ops-stat">
+                    <span class="ops-stat-val" id="opsProgress">219</span>
+                    <span class="ops-stat-label">Dalam Tindakan</span>
+                </div>
+                <div class="ops-stat">
+                    <span class="ops-stat-val" id="opsResolved">871</span>
+                    <span class="ops-stat-label">Selesai</span>
+                </div>
+                <div class="ops-stat">
+                    <span class="ops-stat-val" id="opsEscalated">34</span>
+                    <span class="ops-stat-label">Dieskalaikan</span>
+                </div>
+            </div>
+
+            <!-- Operations Table -->
+            <div class="card">
+                <div class="table-wrap">
+                    <table class="data-table" id="opsTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Aduan</th>
+                                <th>Pengadu</th>
+                                <th>Daerah</th>
+                                <th>Kategori</th>
+                                <th>Agensi</th>
+                                <th>Keutamaan</th>
+                                <th>Status</th>
+                                <th>Sumber</th>
+                                <th>Tarikh</th>
+                            </tr>
+                        </thead>
+                        <tbody id="opsBody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-footer">
+                    <span id="opsCount">Menunjukkan 1-20 dari 1,247 aduan</span>
+                    <div class="pagination">
+                        <button class="page-btn" disabled>&laquo;</button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn">2</button>
+                        <button class="page-btn">3</button>
+                        <button class="page-btn">...</button>
+                        <button class="page-btn">63</button>
+                        <button class="page-btn">&raquo;</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ VIEW: ANALYTICS ============ -->
+        <section class="view" id="view-analytics">
+            <div class="view-header">
+                <div>
+                    <h1>Analitik</h1>
+                    <p class="view-subtitle">Analisis prestasi dan corak aduan merentas daerah</p>
+                </div>
+                <div class="header-actions">
+                    <select class="filter-select" id="analyticsPeriod">
+                        <option value="week">Minggu Ini</option>
+                        <option value="month" selected>Bulan Ini</option>
+                        <option value="quarter">Suku Tahun</option>
+                        <option value="year">Tahun Ini</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="analytics-grid">
+                <!-- Resolution Time by Agency -->
+                <div class="card card-wide">
+                    <div class="card-header">
+                        <h3>Purata Masa Penyelesaian mengikut Agensi (hari)</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="resolutionChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- District Heatmap -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Taburan Aduan mengikut Daerah</h3>
+                    </div>
+                    <div class="heatmap-grid" id="districtHeatmap">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Source Distribution -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Sumber Aduan</h3>
+                    </div>
+                    <div class="chart-container chart-sm">
+                        <canvas id="sourceChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Priority Distribution -->
+                <div class="card card-wide">
+                    <div class="card-header">
+                        <h3>Taburan Keutamaan &amp; Kategori</h3>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="priorityChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- SLA Compliance -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Pematuhan SLA</h3>
+                    </div>
+                    <div class="sla-gauges" id="slaGauges">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ VIEW: INTEGRATIONS ============ -->
+        <section class="view" id="view-integrations">
+            <div class="view-header">
+                <div>
+                    <h1>Hab Integrasi</h1>
+                    <p class="view-subtitle">Sambungkan sistem sedia ada agensi melalui API atau CSV</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-primary" id="addIntegrationBtn">
+                        <span class="material-symbols-rounded">add</span>
+                        Tambah Integrasi
+                    </button>
+                </div>
+            </div>
+
+            <!-- Integration Stats -->
+            <div class="integ-stats">
+                <div class="integ-stat-card">
+                    <div class="integ-stat-icon online">
+                        <span class="material-symbols-rounded">cloud_done</span>
+                    </div>
+                    <div>
+                        <span class="integ-stat-val">5</span>
+                        <span class="integ-stat-label">API Aktif</span>
+                    </div>
+                </div>
+                <div class="integ-stat-card">
+                    <div class="integ-stat-icon csv">
+                        <span class="material-symbols-rounded">table_chart</span>
+                    </div>
+                    <div>
+                        <span class="integ-stat-val">2</span>
+                        <span class="integ-stat-label">CSV Berkala</span>
+                    </div>
+                </div>
+                <div class="integ-stat-card">
+                    <div class="integ-stat-icon synced">
+                        <span class="material-symbols-rounded">sync</span>
+                    </div>
+                    <div>
+                        <span class="integ-stat-val">14,328</span>
+                        <span class="integ-stat-label">Rekod Disinkronkan</span>
+                    </div>
+                </div>
+                <div class="integ-stat-card">
+                    <div class="integ-stat-icon uptime">
+                        <span class="material-symbols-rounded">speed</span>
+                    </div>
+                    <div>
+                        <span class="integ-stat-val">99.7%</span>
+                        <span class="integ-stat-label">Uptime API</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Connected Systems -->
+            <div class="integ-grid">
+                <div class="card card-wide">
+                    <div class="card-header">
+                        <h3>Sistem Bersambung</h3>
+                        <div class="card-tabs">
+                            <button class="tab-btn active" data-tab="all">Semua</button>
+                            <button class="tab-btn" data-tab="api">API</button>
+                            <button class="tab-btn" data-tab="csv">CSV</button>
+                        </div>
+                    </div>
+                    <div class="systems-list" id="systemsList">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- CSV Upload -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Muat Naik CSV</h3>
+                    </div>
+                    <div class="csv-upload-area">
+                        <div class="upload-zone csv-zone" id="csvUploadZone">
+                            <span class="material-symbols-rounded">upload_file</span>
+                            <p>Seret fail CSV ke sini</p>
+                            <small>Format: UTF-8, maks 50MB</small>
+                        </div>
+                        <div class="csv-mapping">
+                            <h4>Pemetaan Lajur Terakhir</h4>
+                            <div class="mapping-row">
+                                <span class="mapping-source">complaint_id</span>
+                                <span class="material-symbols-rounded">arrow_forward</span>
+                                <span class="mapping-target">id_aduan</span>
+                            </div>
+                            <div class="mapping-row">
+                                <span class="mapping-source">description</span>
+                                <span class="material-symbols-rounded">arrow_forward</span>
+                                <span class="mapping-target">butiran</span>
+                            </div>
+                            <div class="mapping-row">
+                                <span class="mapping-source">status</span>
+                                <span class="material-symbols-rounded">arrow_forward</span>
+                                <span class="mapping-target">status_aduan</span>
+                            </div>
+                            <div class="mapping-row">
+                                <span class="mapping-source">created_at</span>
+                                <span class="material-symbols-rounded">arrow_forward</span>
+                                <span class="mapping-target">tarikh_cipta</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sync History -->
+                <div class="card card-wide">
+                    <div class="card-header">
+                        <h3>Sejarah Penyegerakan</h3>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="data-table" id="syncTable">
+                            <thead>
+                                <tr>
+                                    <th>Masa</th>
+                                    <th>Sistem</th>
+                                    <th>Jenis</th>
+                                    <th>Rekod</th>
+                                    <th>Status</th>
+                                    <th>Tempoh</th>
+                                </tr>
+                            </thead>
+                            <tbody id="syncBody">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- API Docs Preview -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3>API Endpoint</h3>
+                    </div>
+                    <div class="api-preview">
+                        <div class="api-endpoint">
+                            <span class="api-method get">GET</span>
+                            <code>/api/v1/aduan</code>
+                        </div>
+                        <div class="api-endpoint">
+                            <span class="api-method post">POST</span>
+                            <code>/api/v1/aduan</code>
+                        </div>
+                        <div class="api-endpoint">
+                            <span class="api-method get">GET</span>
+                            <code>/api/v1/aduan/{id}</code>
+                        </div>
+                        <div class="api-endpoint">
+                            <span class="api-method put">PUT</span>
+                            <code>/api/v1/aduan/{id}/status</code>
+                        </div>
+                        <div class="api-endpoint">
+                            <span class="api-method post">POST</span>
+                            <code>/api/v1/csv/import</code>
+                        </div>
+                        <div class="api-endpoint">
+                            <span class="api-method get">GET</span>
+                            <code>/api/v1/csv/export</code>
+                        </div>
+                        <div class="api-endpoint">
+                            <span class="api-method get">GET</span>
+                            <code>/api/v1/agensi</code>
+                        </div>
+                        <div class="api-endpoint">
+                            <span class="api-method post">POST</span>
+                            <code>/api/v1/webhook</code>
+                        </div>
+                        <div class="api-docs-link">
+                            <a href="#">Buka Dokumentasi Penuh API &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal">
+            <div class="modal-icon success">
+                <span class="material-symbols-rounded">check_circle</span>
+            </div>
+            <h2>Aduan Berjaya Dihantar!</h2>
+            <p>ID Aduan Anda:</p>
+            <div class="modal-id" id="modalId">EA-2026-04-00034</div>
+            <p class="modal-sub">Sila simpan ID ini untuk menjejak status aduan anda</p>
+            <button class="btn-primary" onclick="closeModal()">Tutup</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
