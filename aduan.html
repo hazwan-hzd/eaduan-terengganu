@@ -854,6 +854,17 @@
                         </div>
                     </div>
 
+                    <!-- CAPTCHA Verification -->
+                    <div class="form-section" style="margin-bottom: 32px;">
+                        <div style="background: var(--gray-50); border: 1px solid var(--gray-200); padding: 16px; border-radius: var(--radius-xs); display: flex; align-items: center; justify-content: space-between;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <input type="checkbox" id="captchaCheck" required style="width: 24px; height: 24px; cursor: pointer;">
+                                <label for="captchaCheck" style="font-size: 0.95rem; font-weight: 500; color: var(--gray-800); cursor: pointer;">Sahkan saya bukan robot</label>
+                            </div>
+                            <img src="https://www.gstatic.com/recaptcha/api2/logo_48.png" alt="reCAPTCHA" width="32">
+                        </div>
+                    </div>
+
                     <button type="submit" class="btn-submit" id="btnSubmit">
                         <span class="material-symbols-rounded">send</span>
                         Hantar Aduan Saya
@@ -924,7 +935,16 @@
             <h2>Aduan Berjaya Dihantar!</h2>
             <p>ID Aduan Anda:</p>
             <div class="modal-id" id="modalId">EA-2026-04-00034</div>
-            <p>Sila simpan ID ini untuk menjejak status aduan anda. Anda juga akan menerima SMS pengesahan.</p>
+            <p style="color: var(--blue-700); font-weight: 600; font-size: 0.95rem; margin-bottom: 24px; padding: 12px; background: var(--blue-50); border-radius: 8px;">AMARAN: Sila SIMPAN (Screenshot) ID ini untuk menjejak status aduan anda.</p>
+            <p>Atau terima salinan ID melalui:</p>
+            <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 24px;">
+                <button type="button" style="padding: 10px 16px; border: 1px solid #25D366; background: rgba(37, 211, 102, 0.1); color: #128C7E; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-weight: 600;" onclick="alert('Pautan penjejakan telah dihantar ke WhatsApp anda.')">
+                    <span class="material-symbols-rounded" style="font-size: 18px;">chat</span> WhatsApp
+                </button>
+                <button type="button" style="padding: 10px 16px; border: 1px solid var(--blue-500); background: var(--blue-50); color: var(--blue-600); border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-weight: 600;" onclick="navigator.clipboard.writeText(document.getElementById('modalId').textContent); alert('ID berjaya disalin!');">
+                    <span class="material-symbols-rounded" style="font-size: 18px;">content_copy</span> Salin
+                </button>
+            </div>
             <button class="btn-submit" onclick="closeModal()" style="max-width:200px;margin:0 auto;">Tutup</button>
         </div>
     </div>
