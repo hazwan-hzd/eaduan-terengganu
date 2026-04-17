@@ -269,6 +269,42 @@
         .upload-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
         /* Geo row */
+        /* Contact fields */
+        .contact-fields {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .contact-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .contact-field label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+        .contact-field input {
+            padding: 12px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 0.92rem;
+            color: var(--text-primary);
+            background: var(--surface);
+            outline: none;
+            transition: all 0.18s;
+        }
+        .contact-field input:focus {
+            border-color: var(--text-primary);
+            box-shadow: 0 0 0 3px rgba(0,0,0,0.06);
+        }
+        .contact-field input::placeholder { color: var(--text-muted); }
+
         .geo-row {
             display: flex;
             align-items: center;
@@ -710,6 +746,18 @@
                     </div>
                 </div>
 
+                <!-- Name & Phone -->
+                <div class="contact-fields">
+                    <div class="contact-field">
+                        <label>Nama</label>
+                        <input type="text" id="inputName" placeholder="Ahmad bin Ali" autocomplete="name" oninput="checkUploadReady()">
+                    </div>
+                    <div class="contact-field">
+                        <label>No. Telefon</label>
+                        <input type="tel" id="inputPhone" placeholder="012-3456789" autocomplete="tel" oninput="checkUploadReady()">
+                    </div>
+                </div>
+
                 <!-- Geo location row -->
                 <div class="geo-row" id="geoRow">
                     <div class="geo-dot"></div>
@@ -1030,11 +1078,24 @@
             document.getElementById('photoInput').dispatchEvent(new Event('change'));
         });
 
-        function enableUploadContinue() {
+        function checkUploadReady() {
+            const hasPhoto = document.getElementById('uploadArea').classList.contains('has-file');
+            const name = document.getElementById('inputName').value.trim();
+            const phone = document.getElementById('inputPhone').value.trim();
             const btn = document.getElementById('btnContinueUpload');
-            btn.disabled = false;
-            btn.style.opacity = '1';
-            btn.style.cursor = 'pointer';
+            if (hasPhoto && name.length > 0 && phone.length > 6) {
+                btn.disabled = false;
+                btn.style.opacity = '1';
+                btn.style.cursor = 'pointer';
+            } else {
+                btn.disabled = true;
+                btn.style.opacity = '0.4';
+                btn.style.cursor = 'not-allowed';
+            }
+        }
+
+        function enableUploadContinue() {
+            checkUploadReady();
         }
 
         /* ===== SCREEN 2 → 3: Go to map ===== */
