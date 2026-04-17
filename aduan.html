@@ -3,1273 +3,1107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>eAduan Terengganu - Lapor Aduan Anda</title>
-    <meta name="description" content="Portal aduan awam rakyat negeri Terengganu. Lapor masalah, jejak status, dan terima penyelesaian.">
+    <title>BAKPE.ai - Sistem Aduan Terengganu</title>
+    <meta name="description" content="BAKPE.ai - Hantar aduan awam Terengganu dengan mudah dan pantas.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" rel="stylesheet">
     <style>
         :root {
-            --blue-50: #eff6ff;
-            --blue-100: #dbeafe;
-            --blue-200: #bfdbfe;
-            --blue-400: #60a5fa;
-            --blue-500: #3b82f6;
-            --blue-600: #2563eb;
-            --blue-700: #1d4ed8;
-            --teal-50: #f0fdfa;
-            --teal-400: #2dd4bf;
-            --teal-500: #14b8a6;
-            --teal-600: #0d9488;
-            --violet-400: #a78bfa;
-            --violet-500: #8b5cf6;
-            --green-50: #f0fdf4;
-            --green-400: #4ade80;
-            --green-500: #22c55e;
-            --green-600: #16a34a;
-            --amber-50: #fffbeb;
-            --amber-500: #f59e0b;
-            --red-50: #fef2f2;
-            --red-400: #f87171;
-            --red-500: #ef4444;
-            --slate-50: #f8fafc;
-            --slate-100: #f1f5f9;
-            --slate-200: #e2e8f0;
-            --slate-300: #cbd5e1;
-            --slate-400: #94a3b8;
-            --slate-500: #64748b;
-            --slate-600: #475569;
-            --slate-700: #334155;
-            --slate-800: #1e293b;
-            --slate-900: #0f172a;
-            --radius-xs: 8px;
-            --radius-sm: 14px;
-            --radius: 20px;
-            --radius-lg: 28px;
-            --shadow-sm: 0 1px 4px rgba(0,0,0,0.04), 0 0 1px rgba(0,0,0,0.04);
-            --shadow: 0 4px 16px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
-            --shadow-lg: 0 12px 40px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
-            --shadow-xl: 0 24px 60px rgba(0,0,0,0.1);
-            --glass: rgba(255,255,255,0.72);
-            --glass-border: rgba(255,255,255,0.9);
+            --bg: #f7f7f5;
+            --surface: #ffffff;
+            --border: #e5e5e3;
+            --text-primary: #0d0d0d;
+            --text-secondary: #6b6b6b;
+            --text-muted: #a3a3a3;
+            --accent: #0066ff;
+            --accent-hover: #0052cc;
+            --accent-light: #f0f4ff;
+            --bubble-user: #0d0d0d;
+            --bubble-ai: #ffffff;
+            --green: #16a34a;
+            --red: #dc2626;
+            --amber: #d97706;
         }
-
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { font-size: 15px; scroll-behavior: smooth; }
+        html { height: 100%; font-size: 15px; }
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background: #f0f4ff;
-            color: var(--slate-800);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
             -webkit-font-smoothing: antialiased;
-            min-height: 100vh;
-            overflow-x: hidden;
         }
 
-        /* ========== SPLINE BACKGROUND ========== */
-        .spline-bg {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            background: linear-gradient(135deg, #e8f0fe 0%, #f0f9ff 40%, #f5f3ff 70%, #ecfdf5 100%);
-            overflow: hidden;
-        }
-        .blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.55;
-            animation: floatBlob linear infinite;
-        }
-        .blob-1 {
-            width: 700px; height: 700px;
-            background: radial-gradient(circle, #a5b4fc 0%, #c7d2fe 60%, transparent 100%);
-            top: -200px; left: -200px;
-            animation-duration: 18s;
-        }
-        .blob-2 {
-            width: 600px; height: 600px;
-            background: radial-gradient(circle, #99f6e4 0%, #a7f3d0 60%, transparent 100%);
-            top: 30%; right: -150px;
-            animation-duration: 22s;
-            animation-delay: -6s;
-        }
-        .blob-3 {
-            width: 500px; height: 500px;
-            background: radial-gradient(circle, #fbcfe8 0%, #f9a8d4 60%, transparent 100%);
-            bottom: -100px; left: 25%;
-            animation-duration: 26s;
-            animation-delay: -12s;
-        }
-        .blob-4 {
-            width: 400px; height: 400px;
-            background: radial-gradient(circle, #bae6fd 0%, #7dd3fc 60%, transparent 100%);
-            top: 55%; left: 10%;
-            animation-duration: 20s;
-            animation-delay: -9s;
-        }
-        @keyframes floatBlob {
-            0%   { transform: translate(0, 0) scale(1); }
-            25%  { transform: translate(30px, -40px) scale(1.04); }
-            50%  { transform: translate(-20px, 30px) scale(0.96); }
-            75%  { transform: translate(40px, 20px) scale(1.02); }
-            100% { transform: translate(0, 0) scale(1); }
-        }
-        /* Mesh grid overlay */
-        .mesh-grid {
-            position: fixed;
-            inset: 0;
-            z-index: 1;
-            background-image:
-                linear-gradient(rgba(100,116,139,0.04) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(100,116,139,0.04) 1px, transparent 1px);
-            background-size: 60px 60px;
-        }
-
-        /* ========== WRAPPER ========== */
-        .page-wrap {
-            position: relative;
-            z-index: 2;
-            min-height: 100vh;
-        }
-
-        /* ========== NAVBAR ========== */
-        .navbar {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            padding: 14px 24px;
+        /* ========== TOP BAR ========== */
+        .topbar {
+            height: 56px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            max-width: 1200px;
-            margin: 0 auto;
+            padding: 0 20px;
+            flex-shrink: 0;
         }
-        .navbar-inner {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            padding: 12px 24px;
-            background: rgba(255,255,255,0.6);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border-bottom: 1px solid rgba(255,255,255,0.8);
-        }
-        .navbar-row {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .nav-brand {
+        .topbar-brand {
             display: flex;
             align-items: center;
             gap: 10px;
-            text-decoration: none;
         }
-        .nav-brand-icon {
-            width: 38px; height: 38px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #3b82f6 0%, #14b8a6 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 12px rgba(59,130,246,0.3);
-        }
-        .nav-brand-icon .material-symbols-rounded { font-size: 20px; color: #fff; }
-        .nav-brand-text { font-size: 1rem; font-weight: 800; color: var(--slate-800); letter-spacing: -0.01em; }
-        .nav-brand-sub { font-size: 0.7rem; font-weight: 500; color: var(--slate-400); display: block; margin-top: -2px; }
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .nav-link {
-            padding: 8px 14px;
-            border-radius: 10px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--slate-600);
-            text-decoration: none;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .nav-link:hover { background: rgba(59,130,246,0.08); color: var(--blue-600); }
-        .nav-link.active { background: rgba(59,130,246,0.1); color: var(--blue-600); }
-        .nav-link .material-symbols-rounded { font-size: 17px; }
-        .nav-btn {
-            padding: 10px 20px;
-            background: linear-gradient(135deg, #2563eb 0%, #0d9488 100%);
-            color: #fff;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            text-decoration: none;
-            transition: all 0.2s;
-            box-shadow: 0 4px 14px rgba(37,99,235,0.25);
-        }
-        .nav-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(37,99,235,0.35); }
-
-        /* ========== HERO ========== */
-        .hero {
-            text-align: center;
-            padding: 72px 24px 56px;
-            max-width: 820px;
-            margin: 0 auto;
-        }
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 14px;
-            background: rgba(255,255,255,0.8);
-            border: 1px solid rgba(59,130,246,0.2);
-            border-radius: 100px;
-            font-size: 0.78rem;
-            font-weight: 700;
-            color: var(--blue-600);
-            margin-bottom: 24px;
-            backdrop-filter: blur(12px);
-            box-shadow: 0 2px 12px rgba(59,130,246,0.12);
-            animation: fadeDown 0.6s ease both;
-        }
-        .hero-badge .material-symbols-rounded { font-size: 15px; }
-        .hero h1 {
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            font-weight: 900;
-            letter-spacing: -0.04em;
-            color: var(--slate-900);
-            line-height: 1.1;
-            margin-bottom: 20px;
-            animation: fadeDown 0.6s 0.1s ease both;
-        }
-        .hero h1 .gradient-text {
-            background: linear-gradient(135deg, #2563eb 0%, #14b8a6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .hero p {
-            font-size: 1.1rem;
-            color: var(--slate-500);
-            line-height: 1.65;
-            max-width: 540px;
-            margin: 0 auto 40px;
-            font-weight: 400;
-            animation: fadeDown 0.6s 0.2s ease both;
-        }
-        @keyframes fadeDown {
-            from { opacity: 0; transform: translateY(-14px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Stats Row */
-        .hero-stats {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 32px;
-            flex-wrap: wrap;
-            margin-bottom: 48px;
-            animation: fadeDown 0.6s 0.3s ease both;
-        }
-        .stat-item { text-align: center; }
-        .stat-num {
-            font-size: 1.6rem;
-            font-weight: 900;
-            color: var(--slate-800);
-            letter-spacing: -0.03em;
-        }
-        .stat-label {
-            font-size: 0.72rem;
-            font-weight: 600;
-            color: var(--slate-400);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-top: 2px;
-        }
-        .stat-divider { width: 1px; height: 36px; background: var(--slate-200); }
-
-        /* ========== TAB BAR ========== */
-        .tab-bar {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 24px;
-            animation: fadeUp 0.5s 0.4s ease both;
-        }
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(16px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .tab-buttons {
-            display: flex;
-            background: rgba(255,255,255,0.7);
-            backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255,255,255,0.9);
-            border-radius: var(--radius) var(--radius) 0 0;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.04), 0 1px 0 rgba(255,255,255,0.6);
-            overflow: hidden;
-        }
-        .tab-btn {
-            flex: 1;
-            padding: 18px 20px;
-            border: none;
-            background: transparent;
-            font-family: inherit;
-            font-size: 0.88rem;
-            font-weight: 600;
-            color: var(--slate-500);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.25s;
-            border-bottom: 2px solid transparent;
-            position: relative;
-        }
-        .tab-btn .material-symbols-rounded { font-size: 19px; }
-        .tab-btn:hover { color: var(--blue-600); background: rgba(59,130,246,0.04); }
-        .tab-btn.active {
-            color: var(--blue-600);
-            border-bottom-color: var(--blue-600);
-            background: rgba(59,130,246,0.06);
-        }
-
-        /* ========== MAIN ========== */
-        .main {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 24px 80px;
-        }
-        .tab-panel { display: none; animation: fadeUp 0.3s ease; }
-        .tab-panel.active { display: block; }
-
-        /* ========== FORM CARD ========== */
-        .form-card {
-            background: rgba(255,255,255,0.75);
-            backdrop-filter: blur(24px) saturate(200%);
-            -webkit-backdrop-filter: blur(24px) saturate(200%);
-            border: 1px solid rgba(255,255,255,0.95);
-            border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-            box-shadow: var(--shadow-xl);
-            padding: 40px;
-        }
-
-        /* Step indicator */
-        .steps {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-        }
-        .step-item { display: flex; align-items: center; gap: 8px; }
-        .step-circle {
-            width: 34px; height: 34px;
-            border-radius: 50%;
-            background: var(--slate-100);
-            color: var(--slate-400);
-            border: 2px solid var(--slate-200);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.78rem;
-            font-weight: 800;
-            transition: all 0.3s;
-        }
-        .step-item.active .step-circle {
-            background: linear-gradient(135deg, #2563eb, #14b8a6);
-            color: #fff;
-            border-color: transparent;
-            box-shadow: 0 4px 14px rgba(37,99,235,0.3);
-        }
-        .step-item.done .step-circle {
-            background: var(--green-500);
-            color: #fff;
-            border-color: transparent;
-        }
-        .step-label { font-size: 0.78rem; font-weight: 700; color: var(--slate-400); }
-        .step-item.active .step-label { color: var(--blue-600); }
-        .step-item.done .step-label { color: var(--green-600); }
-        .step-line {
-            width: 48px; height: 2px;
-            background: var(--slate-200);
-            margin: 0 8px;
-            border-radius: 2px;
-        }
-        .step-item.done + .step-line { background: var(--green-400); }
-
-        /* Form layout */
-        .form-section { margin-bottom: 32px; }
-        .form-section-title {
-            font-size: 0.82rem;
-            font-weight: 800;
-            color: var(--slate-500);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 18px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid var(--slate-100);
-        }
-        .form-section-title .material-symbols-rounded {
-            font-size: 17px;
-            color: var(--blue-400);
-            background: var(--blue-50);
-            padding: 6px;
+        .brand-logo {
+            width: 32px; height: 32px;
+            background: var(--text-primary);
             border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
         }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .form-group { display: flex; flex-direction: column; gap: 8px; }
-        .form-group.full { grid-column: 1 / -1; }
-        .form-group label {
+        .brand-logo svg { width: 18px; height: 18px; }
+        .brand-name {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+        .brand-dot { color: var(--accent); }
+        .topbar-links {
+            display: flex; gap: 6px;
+        }
+        .topbar-link {
             font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.15s;
+        }
+        .topbar-link:hover { background: var(--bg); color: var(--text-primary); }
+        .topbar-pill {
+            font-size: 0.72rem;
             font-weight: 700;
-            color: var(--slate-600);
-            letter-spacing: 0.01em;
-        }
-        .required { color: #ef4444; }
-        .form-group input,
-        .form-group textarea {
-            padding: 13px 16px;
-            border: 1.5px solid var(--slate-200);
-            border-radius: var(--radius-sm);
-            font-family: inherit;
-            font-size: 0.95rem;
-            color: var(--slate-800);
-            background: rgba(255,255,255,0.8);
-            transition: all 0.2s;
-            outline: none;
-            resize: vertical;
-        }
-        .form-group input:focus,
-        .form-group textarea:focus {
-            border-color: var(--blue-400);
-            box-shadow: 0 0 0 4px rgba(59,130,246,0.12);
-            background: #fff;
-        }
-        .form-group input::placeholder,
-        .form-group textarea::placeholder { color: var(--slate-300); }
-
-        /* Location input with icon */
-        .input-with-icon { position: relative; }
-        .input-with-icon input { padding-right: 44px; }
-        .input-icon {
-            position: absolute;
-            right: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--slate-400);
-            font-size: 18px;
+            padding: 4px 10px;
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            color: var(--text-secondary);
+            background: var(--surface);
         }
 
-        /* ========== GRID SELECTORS ========== */
-        .grid-selector {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-            gap: 10px;
+        /* ========== CHAT CONTAINER ========== */
+        .chat-wrap {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
         }
-        .grid-selector.pill-grid {
-            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-        }
-        .grid-opt { cursor: pointer; }
-        .grid-opt input { display: none; }
-
-        /* Category icon cards */
-        .grid-card {
-            border: 1.5px solid var(--slate-200);
-            border-radius: var(--radius-sm);
-            padding: 18px 10px;
-            text-align: center;
-            transition: all 0.22s;
-            background: rgba(255,255,255,0.7);
-            backdrop-filter: blur(8px);
+        .chat-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 32px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
-            height: 100%;
-            cursor: pointer;
+            gap: 24px;
+            scroll-behavior: smooth;
         }
-        .grid-card .material-symbols-rounded {
-            font-size: 28px;
-            color: var(--slate-400);
-            transition: all 0.22s;
-            background: var(--slate-50);
-            width: 52px; height: 52px;
-            display: flex; align-items: center; justify-content: center;
-            border-radius: 14px;
-            border: 1px solid var(--slate-100);
-        }
-        .grid-card span { font-size: 0.8rem; font-weight: 700; color: var(--slate-600); line-height: 1.25; }
-        .grid-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 24px rgba(59,130,246,0.12);
-            border-color: var(--blue-200);
-            background: rgba(255,255,255,0.9);
-        }
-        .grid-opt input:checked + .grid-card {
-            border-color: var(--blue-500);
-            background: rgba(239,246,255,0.95);
-            box-shadow: 0 4px 20px rgba(37,99,235,0.18);
-        }
-        .grid-opt input:checked + .grid-card .material-symbols-rounded {
-            color: var(--blue-600);
-            background: var(--blue-50);
-            border-color: var(--blue-100);
-        }
-        .grid-opt input:checked + .grid-card span { color: var(--blue-700); }
+        .chat-scroll::-webkit-scrollbar { width: 4px; }
+        .chat-scroll::-webkit-scrollbar-track { background: transparent; }
+        .chat-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
-        /* Pill selector */
-        .pill-card {
-            border: 1.5px solid var(--slate-200);
-            border-radius: 100px;
-            padding: 10px 16px;
-            text-align: center;
-            transition: all 0.2s;
-            background: rgba(255,255,255,0.7);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.82rem; font-weight: 700; color: var(--slate-600);
-            cursor: pointer;
+        /* ========== SCREENS ========== */
+        .screen {
+            width: 100%;
+            max-width: 680px;
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+            animation: screenIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
         }
-        .pill-card:hover { border-color: var(--blue-200); background: rgba(239,246,255,0.8); color: var(--blue-600); }
-        .grid-opt input:checked + .pill-card {
-            border-color: var(--blue-600);
-            background: var(--blue-600);
-            color: #fff;
-            box-shadow: 0 4px 14px rgba(37,99,235,0.25);
+        .screen.active { display: flex; }
+        @keyframes screenIn {
+            from { opacity: 0; transform: translateY(18px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
-        /* ========== PRIORITY SELECTOR ========== */
-        .priority-options { display: flex; gap: 10px; flex-wrap: wrap; }
-        .priority-opt { cursor: pointer; }
-        .priority-opt input { display: none; }
-        .priority-card {
-            padding: 12px 18px;
-            border-radius: 100px;
-            border: 1.5px solid var(--slate-200);
-            font-size: 0.82rem;
-            font-weight: 700;
-            background: rgba(255,255,255,0.7);
-            transition: all 0.2s;
-            display: flex; align-items: center; gap: 6px;
-            cursor: pointer;
-        }
-        .priority-card .material-symbols-rounded { font-size: 17px; }
-        .priority-opt input:checked + .priority-card.low { border-color: var(--teal-500); background: var(--teal-50); color: var(--teal-600); }
-        .priority-opt input:checked + .priority-card.medium { border-color: var(--amber-500); background: var(--amber-50); color: #b45309; }
-        .priority-opt input:checked + .priority-card.high { border-color: #f97316; background: #fff7ed; color: #c2410c; }
-        .priority-opt input:checked + .priority-card.critical { border-color: var(--red-500); background: var(--red-50); color: #dc2626; }
-
-        /* ========== UPLOAD ZONE ========== */
-        .upload-zone {
-            border: 2px dashed var(--slate-200);
-            border-radius: var(--radius-sm);
-            padding: 32px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.25s;
-            background: rgba(248,250,252,0.6);
-        }
-        .upload-zone:hover { border-color: var(--blue-400); background: rgba(239,246,255,0.6); }
-        .upload-zone .material-symbols-rounded { font-size: 36px; color: var(--blue-400); margin-bottom: 8px; display: block; }
-        .upload-zone p { color: var(--slate-500); font-size: 0.88rem; margin-bottom: 4px; font-weight: 500; }
-        .upload-zone small { color: var(--slate-400); font-size: 0.75rem; }
-
-        /* ========== CAPTCHA ========== */
-        .captcha-row {
-            background: rgba(248,250,252,0.8);
-            border: 1.5px solid var(--slate-200);
-            border-radius: var(--radius-sm);
-            padding: 16px 20px;
+        /* ========== AI BUBBLE ========== */
+        .ai-bubble-wrap {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            backdrop-filter: blur(8px);
-        }
-        .captcha-check { display: flex; align-items: center; gap: 12px; }
-        .captcha-check input { width: 22px; height: 22px; cursor: pointer; accent-color: var(--blue-600); }
-        .captcha-check label { font-size: 0.9rem; font-weight: 600; color: var(--slate-700); cursor: pointer; }
-
-        /* ========== PDPA ========== */
-        .pdpa-row {
-            display: flex;
+            flex-direction: column;
             align-items: flex-start;
             gap: 12px;
-            padding: 16px 20px;
-            background: rgba(239,246,255,0.6);
-            border: 1.5px solid var(--blue-100);
-            border-radius: var(--radius-sm);
-            margin-bottom: 24px;
-        }
-        .pdpa-row input { width: 20px; height: 20px; margin-top: 2px; cursor: pointer; accent-color: var(--blue-600); flex-shrink: 0; }
-        .pdpa-row label { font-size: 0.82rem; line-height: 1.55; color: var(--slate-600); cursor: pointer; }
-        .pdpa-row label a { color: var(--blue-600); text-decoration: none; font-weight: 600; }
-        .pdpa-row label a:hover { text-decoration: underline; }
-
-        /* ========== SUBMIT BUTTON ========== */
-        .btn-submit {
             width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: var(--radius-sm);
-            background: linear-gradient(135deg, #2563eb 0%, #0d9488 100%);
-            color: #fff;
-            font-family: inherit;
-            font-size: 1rem;
-            font-weight: 800;
-            cursor: pointer;
-            transition: all 0.25s;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            letter-spacing: -0.01em;
-            box-shadow: 0 4px 20px rgba(37,99,235,0.3);
         }
-        .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 28px rgba(37,99,235,0.4);
-        }
-        .btn-submit .material-symbols-rounded { font-size: 20px; }
-
-        /* ========== TRACKER ========== */
-        .tracker-card {
-            background: rgba(255,255,255,0.75);
-            backdrop-filter: blur(24px) saturate(200%);
-            border: 1px solid rgba(255,255,255,0.95);
-            border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-            box-shadow: var(--shadow-xl);
-            padding: 40px;
-        }
-        .tracker-input-row {
-            display: flex; gap: 12px; margin-bottom: 28px;
-        }
-        .tracker-input-row input {
-            flex: 1;
-            padding: 14px 18px;
-            border: 1.5px solid var(--slate-200);
-            border-radius: var(--radius-sm);
-            font-family: inherit;
-            font-size: 0.95rem;
-            background: rgba(255,255,255,0.8);
-            outline: none;
-            transition: all 0.2s;
-        }
-        .tracker-input-row input:focus {
-            border-color: var(--blue-400);
-            box-shadow: 0 0 0 4px rgba(59,130,246,0.12);
-        }
-        .btn-track {
-            padding: 14px 24px;
-            background: linear-gradient(135deg, #2563eb, #14b8a6);
-            color: #fff;
-            border: none;
-            border-radius: var(--radius-sm);
-            font-family: inherit;
-            font-size: 0.88rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
-            white-space: nowrap;
-            box-shadow: 0 4px 14px rgba(37,99,235,0.25);
-        }
-        .btn-track:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(37,99,235,0.35); }
-        .tracker-empty { text-align: center; padding: 48px 20px; }
-        .tracker-empty .material-symbols-rounded { font-size: 52px; color: var(--slate-300); display: block; margin-bottom: 12px; }
-        .tracker-empty p { color: var(--slate-400); font-size: 0.9rem; font-weight: 500; }
-        .result-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
-        .result-id { font-size: 1.05rem; font-weight: 800; color: var(--slate-800); letter-spacing: 0.02em; font-family: monospace; background: var(--slate-100); padding: 8px 14px; border-radius: 8px; }
-        .result-status { padding: 6px 14px; border-radius: 100px; font-size: 0.78rem; font-weight: 700; }
-        .in-progress { background: rgba(234,179,8,0.12); color: #92400e; border: 1px solid rgba(234,179,8,0.25); }
-
-        /* Timeline */
-        .timeline { display: flex; flex-direction: column; gap: 0; }
-        .timeline-item {
-            display: flex; gap: 16px; padding-bottom: 24px;
-            position: relative;
-        }
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: 19px; top: 40px;
-            width: 2px;
-            height: calc(100% - 20px);
-            background: var(--slate-100);
-        }
-        .timeline-item:last-child::before { display: none; }
-        .timeline-item.done::before { background: var(--green-200); }
-        .timeline-dot {
-            width: 40px; height: 40px;
+        .ai-avatar {
+            width: 30px; height: 30px;
+            background: var(--text-primary);
             border-radius: 50%;
-            background: var(--slate-100);
             display: flex; align-items: center; justify-content: center;
             flex-shrink: 0;
-            border: 2px solid var(--slate-200);
         }
-        .timeline-dot .material-symbols-rounded { font-size: 18px; color: var(--slate-400); }
-        .timeline-dot.done { background: var(--green-50); border-color: var(--green-200); }
-        .timeline-dot.done .material-symbols-rounded { color: var(--green-500); }
-        .timeline-dot.active { background: rgba(37,99,235,0.08); border-color: var(--blue-300); animation: pulse 1.5s infinite; }
-        .timeline-dot.active .material-symbols-rounded { color: var(--blue-600); }
-        .timeline-dot.pending { background: var(--slate-50); border-color: var(--slate-200); }
-        .timeline-dot.pending .material-symbols-rounded { color: var(--slate-300); }
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(37,99,235,0.2); }
-            50% { box-shadow: 0 0 0 6px rgba(37,99,235,0); }
-        }
-        .timeline-content { padding-top: 6px; }
-        .timeline-content h4 { font-size: 0.9rem; font-weight: 700; color: var(--slate-800); margin-bottom: 4px; }
-        .timeline-content p { font-size: 0.8rem; color: var(--slate-400); line-height: 1.5; }
-        .timeline-badge { display: inline-block; margin-top: 6px; padding: 3px 10px; border-radius: 100px; font-size: 0.72rem; font-weight: 700; }
-        .done-badge { background: var(--green-50); color: var(--green-600); border: 1px solid var(--green-100); }
-        .progress { background: rgba(59,130,246,0.08); color: var(--blue-600); border: 1px solid rgba(59,130,246,0.15); }
-
-        /* ========== FEATURES SECTION ========== */
-        .features {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-            margin-top: 32px;
-        }
-        .feature-card {
-            background: rgba(255,255,255,0.6);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255,255,255,0.9);
-            border-radius: var(--radius);
-            padding: 24px;
-            transition: all 0.25s;
-            text-align: center;
-        }
-        .feature-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
-            background: rgba(255,255,255,0.8);
-        }
-        .feature-icon {
-            width: 52px; height: 52px;
-            border-radius: 14px;
-            display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 14px;
-        }
-        .feature-icon.blue { background: var(--blue-50); }
-        .feature-icon.blue .material-symbols-rounded { color: var(--blue-500); }
-        .feature-icon.teal { background: var(--teal-50); }
-        .feature-icon.teal .material-symbols-rounded { color: var(--teal-500); }
-        .feature-icon.green { background: var(--green-50); }
-        .feature-icon.green .material-symbols-rounded { color: var(--green-500); }
-        .feature-icon .material-symbols-rounded { font-size: 24px; }
-        .feature-card h3 { font-size: 0.9rem; font-weight: 800; color: var(--slate-800); margin-bottom: 6px; }
-        .feature-card p { font-size: 0.8rem; color: var(--slate-500); line-height: 1.55; }
-
-        /* ========== MODAL ========== */
-        .modal-overlay {
-            position: fixed; inset: 0; z-index: 500;
-            background: rgba(15,23,42,0.5);
-            backdrop-filter: blur(12px);
-            display: flex; align-items: center; justify-content: center;
-            padding: 24px;
-            opacity: 0; visibility: hidden; transition: all 0.3s;
-        }
-        .modal-overlay.show { opacity: 1; visibility: visible; }
-        .modal {
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(30px);
-            border: 1px solid rgba(255,255,255,1);
-            border-radius: var(--radius-lg);
-            padding: 40px 32px;
-            max-width: 440px;
+        .ai-avatar svg { width: 16px; height: 16px; }
+        .ai-header { display: flex; align-items: center; gap: 8px; }
+        .ai-name { font-size: 0.8rem; font-weight: 700; color: var(--text-secondary); }
+        .ai-bubble {
+            background: var(--bubble-ai);
+            border: 1px solid var(--border);
+            border-radius: 16px 16px 16px 4px;
+            padding: 18px 22px;
             width: 100%;
-            text-align: center;
-            box-shadow: 0 32px 80px rgba(0,0,0,0.2);
-            transform: scale(0.95) translateY(10px);
-            transition: all 0.3s;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
         }
-        .modal-overlay.show .modal { transform: scale(1) translateY(0); }
-        .modal-check {
-            width: 72px; height: 72px;
-            background: linear-gradient(135deg, #22c55e, #14b8a6);
+
+        /* ========== HERO GREETING ========== */
+        .greeting-main {
+            font-size: clamp(1.6rem, 4vw, 2.4rem);
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: -0.03em;
+            line-height: 1.15;
+            margin-bottom: 6px;
+        }
+        .greeting-sub {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        /* ========== CATEGORY BUTTONS ========== */
+        .category-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            width: 100%;
+            margin-top: 8px;
+        }
+        .cat-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 16px 16px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: 14px;
+            background: var(--surface);
+            cursor: pointer;
+            transition: all 0.18s;
+            text-align: left;
+        }
+        .cat-btn:hover {
+            border-color: var(--text-primary);
+            background: var(--bg);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+        .cat-btn.selected {
+            border-color: var(--accent);
+            background: var(--accent-light);
+        }
+        .cat-icon {
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px;
+        }
+        .cat-icon.elektrik { background: #fef9c3; }
+        .cat-icon.air { background: #e0f2fe; }
+        .cat-icon.jalan { background: #f3f4f6; }
+        .cat-icon.sampah { background: #dcfce7; }
+        .cat-icon.banjir { background: #dbeafe; }
+        .cat-icon.lain { background: #fce7f3; }
+        .cat-name {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .cat-desc {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            font-weight: 400;
+            line-height: 1.4;
+        }
+
+        /* ========== USER REPLY BUBBLE ========== */
+        .user-bubble-wrap { display: flex; justify-content: flex-end; width: 100%; }
+        .user-bubble {
+            background: var(--bubble-user);
+            color: #fff;
+            border-radius: 16px 16px 4px 16px;
+            padding: 12px 18px;
+            font-size: 0.92rem;
+            font-weight: 500;
+            max-width: 75%;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .user-bubble .material-symbols-rounded { font-size: 18px; opacity: 0.7; }
+
+        /* ========== UPLOAD AREA ========== */
+        .upload-area {
+            border: 2px dashed var(--border);
+            border-radius: 16px;
+            padding: 36px 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: var(--bg);
+            position: relative;
+        }
+        .upload-area:hover { border-color: var(--accent); background: var(--accent-light); }
+        .upload-area.has-file { border-color: var(--green); background: #f0fdf4; border-style: solid; }
+        .upload-area input[type="file"] { display: none; }
+        .upload-icon { font-size: 48px; margin-bottom: 12px; display: block; }
+        .upload-title { font-size: 0.95rem; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+        .upload-sub { font-size: 0.78rem; color: var(--text-muted); }
+        .upload-preview {
+            margin-top: 16px;
+            display: none;
+            border-radius: 12px;
+            overflow: hidden;
+            max-height: 220px;
+        }
+        .upload-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+        /* Geo row */
+        .geo-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-top: 10px;
+        }
+        .geo-dot {
+            width: 10px; height: 10px; border-radius: 50%;
+            background: var(--green);
+            flex-shrink: 0;
+            box-shadow: 0 0 0 3px rgba(22,163,74,0.2);
+            animation: geoPulse 1.5s infinite;
+        }
+        @keyframes geoPulse {
+            0%,100% { box-shadow: 0 0 0 3px rgba(22,163,74,0.2); }
+            50% { box-shadow: 0 0 0 6px rgba(22,163,74,0); }
+        }
+        .geo-text { font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); flex: 1; }
+        .geo-coords { font-size: 0.72rem; color: var(--text-muted); font-family: monospace; }
+        .geo-badge {
+            font-size: 0.7rem; font-weight: 700;
+            background: #dcfce7; color: var(--green);
+            padding: 3px 9px; border-radius: 100px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 14px 20px;
+            background: var(--text-primary);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 0.92rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.18s;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .btn-primary:hover { background: #333; transform: translateY(-1px); }
+        .btn-primary .material-symbols-rounded { font-size: 18px; }
+        .btn-secondary {
+            width: 100%;
+            padding: 12px 20px;
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.18s;
+        }
+        .btn-secondary:hover { border-color: var(--text-primary); color: var(--text-primary); }
+
+        /* ========== MAP SCREEN ========== */
+        .map-container {
+            width: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            background: #e8f4fd;
+            position: relative;
+        }
+        .map-svg-wrap {
+            width: 100%;
+            height: 280px;
+            position: relative;
+            overflow: hidden;
+        }
+        .map-bg-pill {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(160deg, #dbeafe 0%, #e0f2fe 40%, #dcfce7 100%);
+        }
+        .map-svg {
+            width: 100%; height: 100%;
+            animation: mapZoom 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+            transform-origin: 55% 45%;
+        }
+        @keyframes mapZoom {
+            from { transform: scale(0.4); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .map-pin {
+            animation: pinDrop 0.5s 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+        @keyframes pinDrop {
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .map-overlay {
+            position: absolute;
+            top: 12px; left: 12px;
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(8px);
+            border-radius: 10px;
+            padding: 8px 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            border: 1px solid rgba(255,255,255,0.8);
+            display: flex; align-items: center; gap: 6px;
+        }
+        .map-overlay .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); }
+        .map-info {
+            padding: 14px 16px;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            display: flex; align-items: center; gap: 10px;
+        }
+        .map-info-icon {
+            width: 34px; height: 34px; border-radius: 8px;
+            background: #fee2e2; display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .map-info-icon .material-symbols-rounded { font-size: 17px; color: var(--red); }
+        .map-info-text { flex: 1; }
+        .map-info-label { font-size: 0.78rem; font-weight: 700; color: var(--text-primary); }
+        .map-info-coords { font-size: 0.7rem; color: var(--text-muted); font-family: monospace; margin-top: 1px; }
+        .map-accuracy {
+            font-size: 0.68rem; font-weight: 700;
+            background: #dcfce7; color: var(--green);
+            padding: 3px 8px; border-radius: 100px;
+        }
+
+        /* ========== TEXT INPUT SCREEN ========== */
+        .chat-input-section {
+            width: 100%;
+            max-width: 680px;
+        }
+        .chat-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 8px;
+        }
+        .chat-input-wrap {
+            background: var(--surface);
+            border: 1.5px solid var(--border);
+            border-radius: 16px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            transition: border-color 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .chat-input-wrap:focus-within { border-color: var(--text-primary); }
+        .chat-textarea {
+            flex: 1;
+            border: none; outline: none;
+            font-family: inherit;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            background: transparent;
+            resize: none;
+            min-height: 60px;
+            max-height: 180px;
+            line-height: 1.6;
+        }
+        .chat-textarea::placeholder { color: var(--text-muted); }
+        .chat-send {
+            width: 36px; height: 36px;
+            background: var(--text-primary);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.15s;
+            align-self: flex-end;
+        }
+        .chat-send:hover { background: #333; transform: scale(1.05); }
+        .chat-send .material-symbols-rounded { font-size: 18px; color: #fff; }
+        .chat-send:disabled { background: var(--border); cursor: not-allowed; }
+        .input-meta {
+            display: flex; gap: 8px; margin-top: 8px;
+            align-items: center;
+        }
+        .input-tag {
+            display: inline-flex; align-items: center; gap: 5px;
+            padding: 4px 10px;
+            background: var(--accent-light);
+            color: var(--accent);
+            border-radius: 100px;
+            font-size: 0.72rem; font-weight: 700;
+            border: 1px solid rgba(0,102,255,0.15);
+        }
+        .input-tag .material-symbols-rounded { font-size: 13px; }
+
+        /* ========== SUCCESS SCREEN ========== */
+        .success-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 36px 28px;
+            text-align: center;
+        }
+        .success-ring {
+            width: 80px; height: 80px;
             border-radius: 50%;
+            background: #f0fdf4;
+            border: 3px solid var(--green);
             display: flex; align-items: center; justify-content: center;
             margin: 0 auto 20px;
-            box-shadow: 0 8px 24px rgba(34,197,94,0.35);
+            animation: successPop 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
         }
-        .modal-check .material-symbols-rounded { font-size: 38px; color: #fff; }
-        .modal h2 { font-size: 1.4rem; font-weight: 900; color: var(--slate-800); margin-bottom: 8px; letter-spacing: -0.02em; }
-        .modal p { color: var(--slate-500); font-size: 0.9rem; margin-bottom: 8px; }
-        .modal-id {
-            font-size: 1.3rem;
-            font-weight: 900;
-            color: var(--blue-600);
-            letter-spacing: 0.05em;
-            padding: 14px 24px;
-            background: var(--blue-50);
-            border: 1.5px solid var(--blue-100);
-            border-radius: var(--radius-sm);
-            margin: 12px 0 20px;
-            font-family: monospace;
+        @keyframes successPop {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .success-ring .material-symbols-rounded { font-size: 38px; color: var(--green); }
+        .success-title { font-size: 1.4rem; font-weight: 900; letter-spacing: -0.025em; color: var(--text-primary); margin-bottom: 6px; }
+        .success-sub { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 24px; }
+        .success-id-label { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+        .success-id {
+            font-size: 1.3rem; font-weight: 900;
+            letter-spacing: 0.05em; color: var(--accent);
+            background: var(--accent-light);
+            border: 1.5px solid rgba(0,102,255,0.15);
+            border-radius: 12px; padding: 14px 24px;
+            margin-bottom: 8px; font-family: monospace;
+        }
+        .success-warn {
+            font-size: 0.78rem; color: var(--amber);
+            font-weight: 600; margin-bottom: 24px;
+            background: #fffbeb; border: 1px solid #fef3c7;
+            border-radius: 8px; padding: 10px 14px;
+        }
+        .success-actions { display: flex; gap: 10px; }
+        .action-btn {
+            flex: 1; padding: 12px 14px;
+            border-radius: 12px; border: 1.5px solid var(--border);
+            background: var(--surface); font-family: inherit;
+            font-size: 0.82rem; font-weight: 700;
+            cursor: pointer; transition: all 0.15s;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            color: var(--text-primary);
+        }
+        .action-btn:hover { border-color: var(--text-primary); }
+        .action-btn .material-symbols-rounded { font-size: 16px; }
+        .action-btn.wa { border-color: #25d366; color: #128c7e; background: #f0fff4; }
+        .action-btn.wa:hover { background: #dcfce7; }
+
+        /* ========== SUMMARY CHIPS ========== */
+        .summary-chips {
+            display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px;
+        }
+        .chip {
+            display: inline-flex; align-items: center; gap: 5px;
+            padding: 5px 12px;
+            border: 1px solid var(--border);
+            border-radius: 100px; background: var(--bg);
+            font-size: 0.75rem; font-weight: 700; color: var(--text-secondary);
+        }
+        .chip .material-symbols-rounded { font-size: 14px; }
+
+        /* ========== TYPING INDICATOR ========== */
+        .typing {
+            display: flex; gap: 4px; align-items: center; padding: 4px 0;
+        }
+        .typing span {
+            width: 7px; height: 7px; border-radius: 50%;
+            background: var(--text-muted);
+            animation: typingBounce 1.2s infinite;
+        }
+        .typing span:nth-child(2) { animation-delay: 0.2s; }
+        .typing span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typingBounce {
+            0%,60%,100% { transform: translateY(0); opacity: 0.4; }
+            30% { transform: translateY(-5px); opacity: 1; }
         }
 
-        /* ========== FOOTER ========== */
-        .footer {
+        /* ========== BOTTOM HINT ========== */
+        .bottom-hint {
+            flex-shrink: 0;
             text-align: center;
-            padding: 32px 24px;
-            border-top: 1px solid rgba(226,232,240,0.8);
-            background: rgba(255,255,255,0.5);
-            backdrop-filter: blur(12px);
+            padding: 10px;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            background: var(--surface);
         }
-        .footer-brand { font-size: 0.95rem; font-weight: 800; color: var(--slate-700); margin-bottom: 4px; }
-        .footer p { font-size: 0.78rem; color: var(--slate-400); }
-        .footer a { color: var(--blue-500); text-decoration: none; font-weight: 600; }
-        .footer a:hover { text-decoration: underline; }
+        .bottom-hint a { color: inherit; text-decoration: none; }
+
+        /* ========== PROGRESS BAR ========== */
+        .progress-bar {
+            height: 2px;
+            background: var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            transition: width 0.5s ease;
+            width: 0%;
+            border-radius: 2px;
+        }
 
         /* ========== RESPONSIVE ========== */
-        @media (max-width: 768px) {
-            .hero { padding: 52px 20px 40px; }
-            .hero h1 { font-size: 2rem; }
-            .features { grid-template-columns: 1fr; }
-            .form-grid { grid-template-columns: 1fr; }
-            .form-card, .tracker-card { padding: 24px 20px; }
-            .hero-stats { gap: 20px; }
-            .stat-divider { height: 28px; }
-            .nav-links { display: none; }
-            .grid-selector { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
-            .tab-btn { font-size: 0.8rem; padding: 14px 12px; }
+        @media (max-width: 600px) {
+            .category-grid { grid-template-columns: 1fr 1fr; }
+            .topbar-links { display: none; }
+            .chat-scroll { padding: 20px 14px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Background -->
-    <div class="spline-bg">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
-        <div class="blob blob-4"></div>
+    <!-- Top Bar -->
+    <div class="topbar">
+        <div class="topbar-brand">
+            <div class="brand-logo">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="white" opacity="0.3"/>
+                    <path d="M12 6v6l4 2" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <div class="brand-name">BAKPE<span class="brand-dot">.ai</span></div>
+        </div>
+        <nav class="topbar-links">
+            <a href="index.html" target="_blank" class="topbar-link">Dashboard</a>
+            <a href="agency.html" target="_blank" class="topbar-link">Portal Agensi</a>
+        </nav>
+        <div class="topbar-pill">Terengganu &bull; Beta</div>
     </div>
-    <div class="mesh-grid"></div>
 
-    <!-- Page Wrap -->
-    <div class="page-wrap">
+    <!-- Progress Bar -->
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
 
-        <!-- Navbar -->
-        <div class="navbar-inner">
-            <div class="navbar-row">
-                <a href="#" class="nav-brand">
-                    <div class="nav-brand-icon">
-                        <span class="material-symbols-rounded">shield</span>
+    <!-- Chat Wrap -->
+    <div class="chat-wrap">
+        <div class="chat-scroll" id="chatScroll">
+
+            <!-- ===== SCREEN 1: GREETING + CATEGORIES ===== -->
+            <div class="screen active" id="screen1">
+                <div class="ai-bubble-wrap">
+                    <div class="ai-header">
+                        <div class="ai-avatar">
+                            <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="white" opacity="0.25"/><path d="M12 6v6l4 2" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+                        </div>
+                        <div class="ai-name">BAKPE.ai</div>
                     </div>
-                    <div>
-                        <div class="nav-brand-text">eAduan Terengganu</div>
-                        <span class="nav-brand-sub">Sistem Aduan Bersepadu</span>
+                    <div class="ai-bubble">
+                        <div class="greeting-main">Bakpe, ada aduan? 👋</div>
+                        <div class="greeting-sub" style="margin-top:8px;">Pilih jenis masalah yang anda ingin laporkan. Saya akan bantu hantar terus ke agensi yang betul.</div>
                     </div>
-                </a>
-                <nav class="nav-links">
-                    <a href="index.html" class="nav-link" target="_blank">
-                        <span class="material-symbols-rounded">dashboard</span>
-                        Admin Dashboard
-                    </a>
-                    <a href="agency.html" class="nav-link" target="_blank">
-                        <span class="material-symbols-rounded">business</span>
-                        Portal Agensi
-                    </a>
-                </nav>
-                <a href="#" class="nav-btn">Tentang Sistem</a>
-            </div>
-        </div>
+                </div>
 
-        <!-- Hero -->
-        <section class="hero">
-            <div class="hero-badge">
-                <span class="material-symbols-rounded">verified</span>
-                Sistem Rasmi Negeri Terengganu
+                <div class="category-grid">
+                    <button class="cat-btn" onclick="selectCategory('Bekalan Elektrik', '⚡', 'elektrik')">
+                        <div class="cat-icon elektrik">⚡</div>
+                        <div>
+                            <div class="cat-name">Elektrik</div>
+                            <div class="cat-desc">Bekalan, lampu jalan, trip</div>
+                        </div>
+                    </button>
+                    <button class="cat-btn" onclick="selectCategory('Bekalan Air', '💧', 'air')">
+                        <div class="cat-icon air">💧</div>
+                        <div>
+                            <div class="cat-name">Air</div>
+                            <div class="cat-desc">Paip pecah, tiada bekalan</div>
+                        </div>
+                    </button>
+                    <button class="cat-btn" onclick="selectCategory('Jalan & Infrastruktur', '🛣️', 'jalan')">
+                        <div class="cat-icon jalan">🛣️</div>
+                        <div>
+                            <div class="cat-name">Jalan</div>
+                            <div class="cat-desc">Lubang, longkang, tanda</div>
+                        </div>
+                    </button>
+                    <button class="cat-btn" onclick="selectCategory('Sampah & Kebersihan', '🗑️', 'sampah')">
+                        <div class="cat-icon sampah">🗑️</div>
+                        <div>
+                            <div class="cat-name">Sampah</div>
+                            <div class="cat-desc">Sampah tidak dikutip, busuk</div>
+                        </div>
+                    </button>
+                    <button class="cat-btn" onclick="selectCategory('Banjir & Saliran', '🌊', 'banjir')">
+                        <div class="cat-icon banjir">🌊</div>
+                        <div>
+                            <div class="cat-name">Banjir</div>
+                            <div class="cat-desc">Banjir kilat, longkang tersumbat</div>
+                        </div>
+                    </button>
+                    <button class="cat-btn" onclick="selectCategory('Hal Lain', '📋', 'lain')">
+                        <div class="cat-icon lain">📋</div>
+                        <div>
+                            <div class="cat-name">Lain-lain</div>
+                            <div class="cat-desc">Bising, vandalisme, lain</div>
+                        </div>
+                    </button>
+                </div>
             </div>
-            <h1>Suarakan Masalah Anda,<br><span class="gradient-text">Kami Bertindak Balas.</span></h1>
-            <p>Platform aduan awam bersepadu untuk rakyat Terengganu. Laporkan masalah, jejak status secara langsung, dan terima penyelesaian tepat pada masanya.</p>
-            <div class="hero-stats">
-                <div class="stat-item">
-                    <div class="stat-num">1,248</div>
-                    <div class="stat-label">Aduan Bulan Ini</div>
-                </div>
-                <div class="stat-divider"></div>
-                <div class="stat-item">
-                    <div class="stat-num">94%</div>
-                    <div class="stat-label">Diselesaikan dalam SLA</div>
-                </div>
-                <div class="stat-divider"></div>
-                <div class="stat-item">
-                    <div class="stat-num">7</div>
-                    <div class="stat-label">Agensi Bersepadu</div>
-                </div>
-                <div class="stat-divider"></div>
-                <div class="stat-item">
-                    <div class="stat-num">18h</div>
-                    <div class="stat-label">Purata Respons</div>
-                </div>
-            </div>
-        </section>
 
-        <!-- Tab Bar -->
-        <div class="tab-bar">
-            <div class="tab-buttons">
-                <button class="tab-btn active" data-tab="aduan">
-                    <span class="material-symbols-rounded">edit_note</span>
-                    Hantar Aduan
+            <!-- ===== SCREEN 2: UPLOAD + GEO ===== -->
+            <div class="screen" id="screen2">
+                <!-- User reply bubble -->
+                <div class="user-bubble-wrap" id="userBubble1">
+                    <div class="user-bubble">
+                        <span id="selectedEmoji">⚡</span>
+                        <span id="selectedCat">Bekalan Elektrik</span>
+                    </div>
+                </div>
+
+                <!-- AI response -->
+                <div class="ai-bubble-wrap">
+                    <div class="ai-header">
+                        <div class="ai-avatar">
+                            <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="white" opacity="0.25"/><path d="M12 6v6l4 2" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+                        </div>
+                        <div class="ai-name">BAKPE.ai</div>
+                    </div>
+                    <div class="ai-bubble">
+                        <div style="font-size:0.95rem; font-weight:600; color:var(--text-primary); margin-bottom:4px;">Ambil gambar atau muat naik bukti</div>
+                        <div style="font-size:0.85rem; color:var(--text-secondary);">Satu gambar dah cukup. Saya akan kesan lokasi anda secara automatik.</div>
+                    </div>
+                </div>
+
+                <!-- Upload area -->
+                <div class="upload-area" id="uploadArea" onclick="document.getElementById('photoInput').click()">
+                    <input type="file" id="photoInput" accept="image/*" capture="environment">
+                    <span class="upload-icon">📷</span>
+                    <div class="upload-title">Ambil gambar / pilih dari galeri</div>
+                    <div class="upload-sub">Maksimum 10MB &bull; JPG, PNG</div>
+                    <div class="upload-preview" id="uploadPreview">
+                        <img id="previewImg" src="" alt="Preview">
+                    </div>
+                </div>
+
+                <!-- Geo location row -->
+                <div class="geo-row" id="geoRow">
+                    <div class="geo-dot"></div>
+                    <div class="geo-text">Mengesan lokasi anda...</div>
+                    <div class="geo-coords" id="geoCoords">---, ---</div>
+                    <div class="geo-badge" id="geoBadge">GPS</div>
+                </div>
+
+                <button class="btn-primary" id="btnContinueUpload" onclick="goToMapScreen()" disabled style="opacity:0.4; cursor:not-allowed;">
+                    <span class="material-symbols-rounded">arrow_forward</span>
+                    Seterusnya
                 </button>
-                <button class="tab-btn" data-tab="track">
-                    <span class="material-symbols-rounded">travel_explore</span>
-                    Jejak Status
-                </button>
             </div>
-        </div>
 
-        <!-- Main Content -->
-        <main class="main">
+            <!-- ===== SCREEN 3: MAP ===== -->
+            <div class="screen" id="screen3">
+                <!-- User uploaded image chip -->
+                <div class="user-bubble-wrap">
+                    <div class="user-bubble">
+                        <span class="material-symbols-rounded">image</span>
+                        Gambar dimuat naik
+                    </div>
+                </div>
 
-            <!-- PANEL: Aduan -->
-            <div class="tab-panel active" id="panel-aduan">
-                <div class="form-card">
+                <!-- AI response -->
+                <div class="ai-bubble-wrap">
+                    <div class="ai-header">
+                        <div class="ai-avatar"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="white" opacity="0.25"/><path d="M12 6v6l4 2" stroke="white" stroke-width="2" stroke-linecap="round"/></svg></div>
+                        <div class="ai-name">BAKPE.ai</div>
+                    </div>
+                    <div class="ai-bubble">
+                        <div style="font-size:0.95rem; font-weight:600; color:var(--text-primary); margin-bottom:4px;">Lokasi dikesan ✓</div>
+                        <div style="font-size:0.85rem; color:var(--text-secondary);">Aduan akan dihantar ke agensi yang bertanggungjawab di kawasan ini.</div>
+                    </div>
+                </div>
 
-                    <!-- Steps -->
-                    <div class="steps">
-                        <div class="step-item active" id="step-1">
-                            <div class="step-circle">1</div>
-                            <div class="step-label">Maklumat Pemohon</div>
-                        </div>
-                        <div class="step-line"></div>
-                        <div class="step-item" id="step-2">
-                            <div class="step-circle">2</div>
-                            <div class="step-label">Butiran Aduan</div>
-                        </div>
-                        <div class="step-line"></div>
-                        <div class="step-item" id="step-3">
-                            <div class="step-circle">3</div>
-                            <div class="step-label">Bukti & Pengesahan</div>
+                <!-- Terengganu Map -->
+                <div class="map-container">
+                    <div class="map-svg-wrap">
+                        <div class="map-bg-pill"></div>
+                        <svg class="map-svg" viewBox="0 0 400 380" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Sea background -->
+                            <rect width="400" height="380" fill="none"/>
+                            <!-- District boundaries - Terengganu stylized -->
+                            <g fill="#c7d7f0" stroke="#8facd4" stroke-width="1.2">
+                                <!-- Besut (north) -->
+                                <path d="M 150 30 L 195 25 L 230 45 L 220 75 L 190 80 L 165 65 Z" fill="#b8cfe8"/>
+                                <!-- Setiu -->
+                                <path d="M 165 65 L 190 80 L 220 75 L 225 110 L 200 125 L 170 115 L 155 90 Z" fill="#c2d8ec"/>
+                                <!-- Kuala Terengganu -->
+                                <path d="M 170 115 L 200 125 L 225 110 L 230 145 L 210 165 L 180 155 L 165 135 Z" fill="#a8c4e0" stroke="#6a9bc0" stroke-width="1.5"/>
+                                <!-- Marang -->
+                                <path d="M 165 135 L 180 155 L 210 165 L 215 195 L 185 205 L 160 190 L 155 165 Z" fill="#bcd3ea"/>
+                                <!-- Hulu Terengganu (interior) -->
+                                <path d="M 100 90 L 155 90 L 170 115 L 165 135 L 155 165 L 120 170 L 90 145 L 85 110 Z" fill="#d1e4f0"/>
+                                <!-- Dungun -->
+                                <path d="M 155 165 L 160 190 L 185 205 L 188 235 L 158 245 L 135 225 L 130 195 L 145 175 Z" fill="#b5cfe4"/>
+                                <!-- Kemaman (south) -->
+                                <path d="M 130 195 L 135 225 L 158 245 L 160 280 L 130 290 L 105 270 L 100 240 L 110 210 Z" fill="#c0d5e8"/>
+                            </g>
+
+                            <!-- Coastline -->
+                            <path d="M 195 25 L 235 50 L 238 80 L 232 115 L 238 155 L 222 190 L 228 230 L 220 270 L 205 300" 
+                                  fill="none" stroke="#6a9bc0" stroke-width="2" stroke-dasharray="6,3" opacity="0.7"/>
+
+                            <!-- Sea label -->
+                            <text x="290" y="160" fill="#6a9bc0" font-size="11" font-weight="600" opacity="0.8" font-family="Inter,sans-serif" transform="rotate(0,290,160)">Laut China</text>
+                            <text x="278" y="174" fill="#6a9bc0" font-size="11" font-weight="600" opacity="0.8" font-family="Inter,sans-serif">Selatan</text>
+
+                            <!-- District labels -->
+                            <text x="175" y="58" fill="#2d5986" font-size="8.5" font-weight="700" font-family="Inter,sans-serif" text-anchor="middle">BESUT</text>
+                            <text x="185" y="98" fill="#2d5986" font-size="8.5" font-weight="700" font-family="Inter,sans-serif" text-anchor="middle">SETIU</text>
+                            <text x="193" y="142" fill="#1a3d6b" font-size="9" font-weight="800" font-family="Inter,sans-serif" text-anchor="middle">KT</text>
+                            <text x="180" y="178" fill="#2d5986" font-size="8.5" font-weight="700" font-family="Inter,sans-serif" text-anchor="middle">MARANG</text>
+                            <text x="118" y="132" fill="#2d5986" font-size="8" font-weight="700" font-family="Inter,sans-serif" text-anchor="middle">HULU T.</text>
+                            <text x="152" y="212" fill="#2d5986" font-size="8.5" font-weight="700" font-family="Inter,sans-serif" text-anchor="middle">DUNGUN</text>
+                            <text x="135" y="252" fill="#2d5986" font-size="8.5" font-weight="700" font-family="Inter,sans-serif" text-anchor="middle">KEMAMAN</text>
+
+                            <!-- Animated pin on Kuala Terengganu -->
+                            <g class="map-pin" transform="translate(200,138)">
+                                <!-- Ripple rings -->
+                                <circle cx="0" cy="0" r="24" fill="rgba(220,38,38,0.08)" opacity="0.9">
+                                    <animate attributeName="r" from="10" to="30" dur="1.8s" repeatCount="indefinite"/>
+                                    <animate attributeName="opacity" from="0.5" to="0" dur="1.8s" repeatCount="indefinite"/>
+                                </circle>
+                                <circle cx="0" cy="0" r="16" fill="rgba(220,38,38,0.12)" opacity="0.8">
+                                    <animate attributeName="r" from="6" to="20" dur="1.8s" begin="0.3s" repeatCount="indefinite"/>
+                                    <animate attributeName="opacity" from="0.6" to="0" dur="1.8s" begin="0.3s" repeatCount="indefinite"/>
+                                </circle>
+                                <!-- Pin body -->
+                                <circle cx="0" cy="0" r="9" fill="white" stroke="#dc2626" stroke-width="3"/>
+                                <circle cx="0" cy="0" r="4" fill="#dc2626"/>
+                                <!-- Shadow -->
+                                <ellipse cx="0" cy="12" rx="6" ry="2" fill="rgba(0,0,0,0.15)"/>
+                            </g>
+
+                            <!-- Scale bar -->
+                            <line x1="30" y1="340" x2="80" y2="340" stroke="#6a9bc0" stroke-width="2"/>
+                            <line x1="30" y1="335" x2="30" y2="345" stroke="#6a9bc0" stroke-width="2"/>
+                            <line x1="80" y1="335" x2="80" y2="345" stroke="#6a9bc0" stroke-width="2"/>
+                            <text x="55" y="360" fill="#6a9bc0" font-size="9" text-anchor="middle" font-family="Inter,sans-serif">50 km</text>
+                        </svg>
+
+                        <!-- Map overlay chip -->
+                        <div class="map-overlay">
+                            <div class="dot"></div>
+                            Lokasi Dikesan
                         </div>
                     </div>
-
-                    <form id="aduanForm">
-                        <!-- Section 1: Personal -->
-                        <div class="form-section" id="section-1">
-                            <div class="form-section-title">
-                                <span class="material-symbols-rounded">person</span>
-                                Maklumat Pemohon
-                            </div>
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label>Nama Penuh <span class="required">*</span></label>
-                                    <input type="text" placeholder="Ahmad bin Abdullah" required id="inputName">
-                                </div>
-                                <div class="form-group">
-                                    <label>Nombor Telefon <span class="required">*</span></label>
-                                    <input type="tel" placeholder="0123456789" required id="inputPhone">
-                                </div>
-                                <div class="form-group">
-                                    <label>Nombor Kad Pengenalan</label>
-                                    <input type="text" placeholder="990101-11-1234" id="inputIC">
-                                </div>
-                                <div class="form-group">
-                                    <label>Emel (pilihan)</label>
-                                    <input type="email" placeholder="nama@email.com" id="inputEmail">
-                                </div>
-                            </div>
+                    <div class="map-info">
+                        <div class="map-info-icon">
+                            <span class="material-symbols-rounded">location_on</span>
                         </div>
-
-                        <!-- Section 2: Complaint Details -->
-                        <div class="form-section" id="section-2">
-                            <div class="form-section-title">
-                                <span class="material-symbols-rounded">description</span>
-                                Butiran Aduan
-                            </div>
-                            <div class="form-grid">
-                                <div class="form-group full">
-                                    <label>Daerah <span class="required">*</span></label>
-                                    <div class="grid-selector pill-grid">
-                                        <label class="grid-opt"><input type="radio" name="district" value="kuala-terengganu" required><div class="pill-card">Kuala Terengganu</div></label>
-                                        <label class="grid-opt"><input type="radio" name="district" value="kemaman"><div class="pill-card">Kemaman</div></label>
-                                        <label class="grid-opt"><input type="radio" name="district" value="dungun"><div class="pill-card">Dungun</div></label>
-                                        <label class="grid-opt"><input type="radio" name="district" value="marang"><div class="pill-card">Marang</div></label>
-                                        <label class="grid-opt"><input type="radio" name="district" value="hulu-terengganu"><div class="pill-card">Hulu Terengganu</div></label>
-                                        <label class="grid-opt"><input type="radio" name="district" value="setiu"><div class="pill-card">Setiu</div></label>
-                                        <label class="grid-opt"><input type="radio" name="district" value="besut"><div class="pill-card">Besut</div></label>
-                                    </div>
-                                </div>
-                                <div class="form-group full">
-                                    <label>Kategori Masalah <span class="required">*</span></label>
-                                    <div class="grid-selector">
-                                        <label class="grid-opt"><input type="radio" name="category" value="infra" required><div class="grid-card"><span class="material-symbols-rounded">edit_road</span><span>Jalan & Infrastruktur</span></div></label>
-                                        <label class="grid-opt"><input type="radio" name="category" value="water"><div class="grid-card"><span class="material-symbols-rounded">water_drop</span><span>Bekalan Air</span></div></label>
-                                        <label class="grid-opt"><input type="radio" name="category" value="electric"><div class="grid-card"><span class="material-symbols-rounded">electric_bolt</span><span>Bekalan Elektrik</span></div></label>
-                                        <label class="grid-opt"><input type="radio" name="category" value="housing"><div class="grid-card"><span class="material-symbols-rounded">home</span><span>Perumahan</span></div></label>
-                                        <label class="grid-opt"><input type="radio" name="category" value="environment"><div class="grid-card"><span class="material-symbols-rounded">forest</span><span>Alam Sekitar</span></div></label>
-                                        <label class="grid-opt"><input type="radio" name="category" value="safety"><div class="grid-card"><span class="material-symbols-rounded">local_police</span><span>Keselamatan Awam</span></div></label>
-                                        <label class="grid-opt"><input type="radio" name="category" value="cleanliness"><div class="grid-card"><span class="material-symbols-rounded">delete</span><span>Kebersihan</span></div></label>
-                                        <label class="grid-opt"><input type="radio" name="category" value="flood"><div class="grid-card"><span class="material-symbols-rounded">flood</span><span>Banjir & Bencana</span></div></label>
-                                    </div>
-                                </div>
-                                <div class="form-group full">
-                                    <label>Lokasi Tepat <span class="required">*</span></label>
-                                    <div class="input-with-icon">
-                                        <input type="text" placeholder="cth. Jalan Sultan Mahmud, depan Masjid Abidin, Kuala Terengganu" required id="inputLocation">
-                                        <span class="material-symbols-rounded input-icon">location_on</span>
-                                    </div>
-                                </div>
-                                <div class="form-group full">
-                                    <label>Penerangan Masalah <span class="required">*</span></label>
-                                    <textarea rows="5" placeholder="Nyatakan masalah anda dengan jelas. Semakin terperinci, semakin cepat kami boleh bertindak..." required id="inputDesc"></textarea>
-                                </div>
-                            </div>
+                        <div class="map-info-text">
+                            <div class="map-info-label" id="mapLocLabel">Kuala Terengganu, Terengganu</div>
+                            <div class="map-info-coords" id="mapLocCoords">5.3302° N, 103.1408° E</div>
                         </div>
+                        <div class="map-accuracy">±12m</div>
+                    </div>
+                </div>
 
-                        <!-- Section 3: Evidence & Priority -->
-                        <div class="form-section" id="section-3">
-                            <div class="form-section-title">
-                                <span class="material-symbols-rounded">attach_file</span>
-                                Bukti & Keutamaan
-                            </div>
-                            <div class="form-group" style="margin-bottom: 20px;">
-                                <label>Lampirkan Gambar / Video</label>
-                                <div class="upload-zone" id="uploadZone">
-                                    <span class="material-symbols-rounded">add_photo_alternate</span>
-                                    <p>Klik atau seret gambar/video ke sini</p>
-                                    <small>JPG, PNG, MP4 - Maksimum 10MB setiap fail</small>
-                                    <input type="file" id="fileInput" accept="image/*,video/mp4" multiple style="display:none">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>Tahap Keutamaan</label>
-                                <div class="priority-options">
-                                    <label class="priority-opt"><input type="radio" name="priority" value="low"><div class="priority-card low"><span class="material-symbols-rounded">remove_circle</span>Rendah</div></label>
-                                    <label class="priority-opt"><input type="radio" name="priority" value="medium" checked><div class="priority-card medium"><span class="material-symbols-rounded">warning</span>Sederhana</div></label>
-                                    <label class="priority-opt"><input type="radio" name="priority" value="high"><div class="priority-card high"><span class="material-symbols-rounded">priority_high</span>Tinggi</div></label>
-                                    <label class="priority-opt"><input type="radio" name="priority" value="critical"><div class="priority-card critical"><span class="material-symbols-rounded">emergency</span>Kritikal</div></label>
-                                </div>
-                            </div>
+                <button class="btn-primary" onclick="goToTextScreen()">
+                    <span class="material-symbols-rounded">arrow_forward</span>
+                    Lokasi Betul, Teruskan
+                </button>
+                <button class="btn-secondary" onclick="goBack2()">Tukar lokasi</button>
+            </div>
+
+            <!-- ===== SCREEN 4: TEXT DESCRIPTION ===== -->
+            <div class="screen" id="screen4">
+                <!-- Location confirmed bubble -->
+                <div class="user-bubble-wrap">
+                    <div class="user-bubble">
+                        <span class="material-symbols-rounded">my_location</span>
+                        Lokasi disahkan
+                    </div>
+                </div>
+
+                <!-- AI response -->
+                <div class="ai-bubble-wrap">
+                    <div class="ai-header">
+                        <div class="ai-avatar"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="white" opacity="0.25"/><path d="M12 6v6l4 2" stroke="white" stroke-width="2" stroke-linecap="round"/></svg></div>
+                        <div class="ai-name">BAKPE.ai</div>
+                    </div>
+                    <div class="ai-bubble">
+                        <div style="font-size:0.95rem; font-weight:600; color:var(--text-primary); margin-bottom:4px;">Cerita sikit, apa yang berlaku? 👇</div>
+                        <div style="font-size:0.85rem; color:var(--text-secondary);">Terang sikit supaya kami boleh hantar kepada pengurus yang sesuai. Pendek pun boleh.</div>
+                        <div class="summary-chips">
+                            <div class="chip"><span class="material-symbols-rounded">category</span><span id="chipCat">Elektrik</span></div>
+                            <div class="chip"><span class="material-symbols-rounded">location_on</span>Kuala Terengganu</div>
+                            <div class="chip"><span class="material-symbols-rounded">image</span>1 gambar</div>
                         </div>
+                    </div>
+                </div>
+            </div>
 
-                        <!-- CAPTCHA -->
-                        <div class="form-section" style="margin-bottom: 20px;">
-                            <div class="captcha-row">
-                                <div class="captcha-check">
-                                    <input type="checkbox" id="captchaCheck" required>
-                                    <label for="captchaCheck">Sahkan saya bukan robot</label>
-                                </div>
-                                <img src="https://www.gstatic.com/recaptcha/api2/logo_48.png" alt="reCAPTCHA" width="32">
-                            </div>
-                        </div>
-
-                        <!-- PDPA Consent -->
-                        <div class="pdpa-row">
-                            <input type="checkbox" id="pdpaCheck" required>
-                            <label for="pdpaCheck">
-                                Saya bersetuju dengan <a href="#" onclick="return false">Dasar Privasi</a> dan <a href="#" onclick="return false">Syarat Penggunaan</a> eAduan Terengganu. Maklumat peribadi saya dikumpul semata-mata bagi tujuan pengurusan aduan awam di bawah Akta Perlindungan Data Peribadi 2010 (PDPA).
-                            </label>
-                        </div>
-
-                        <button type="submit" class="btn-submit" id="btnSubmit">
-                            <span class="material-symbols-rounded">send</span>
-                            Hantar Aduan Saya
+            <!-- ===== SCREEN 5: SUCCESS ===== -->
+            <div class="screen" id="screen5">
+                <div class="success-card">
+                    <div class="success-ring">
+                        <span class="material-symbols-rounded">check</span>
+                    </div>
+                    <div class="success-title">Aduan Dihantar! 🎉</div>
+                    <div class="success-sub">BAKPE dah terima. Agensi berkaitan akan bertindak balas dalam 24 jam bekerja.</div>
+                    <div class="success-id-label">ID Aduan Anda</div>
+                    <div class="success-id" id="successId">BAKPE-2026-00000</div>
+                    <div class="success-warn">⚠️ Screenshot ID ini sebelum tutup halaman</div>
+                    <div class="success-actions">
+                        <button class="action-btn wa" onclick="alert('Salinan dihantar ke WhatsApp anda.')">
+                            <span class="material-symbols-rounded">chat</span>
+                            WhatsApp
                         </button>
-                    </form>
-                </div>
-            </div>
-
-            <!-- PANEL: Track -->
-            <div class="tab-panel" id="panel-track">
-                <div class="tracker-card">
-                    <div class="tracker-input-row">
-                        <input type="text" placeholder="Masukkan ID aduan anda, cth. EA-2026-04-12345" id="trackInput">
-                        <button class="btn-track" id="btnTrack">
-                            <span class="material-symbols-rounded" style="vertical-align:middle;margin-right:4px;">search</span>
-                            Jejak
+                        <button class="action-btn" onclick="copyId()">
+                            <span class="material-symbols-rounded">content_copy</span>
+                            Salin ID
+                        </button>
+                        <button class="action-btn" onclick="resetAll()">
+                            <span class="material-symbols-rounded">refresh</span>
+                            Baru
                         </button>
                     </div>
-                    <div id="trackResult">
-                        <div class="tracker-empty">
-                            <span class="material-symbols-rounded">travel_explore</span>
-                            <p>Masukkan ID aduan untuk melihat status terkini aduan anda.</p>
-                            <p style="margin-top:6px; font-size:0.78rem;">Anda akan menerima ID aduan selepas menghantar borang aduan.</p>
-                        </div>
-                    </div>
                 </div>
             </div>
 
-            <!-- Feature Cards -->
-            <div class="features">
-                <div class="feature-card">
-                    <div class="feature-icon blue"><span class="material-symbols-rounded">schedule</span></div>
-                    <h3>Respons dalam 24 Jam</h3>
-                    <p>Aduan anda disalurkan terus ke agensi bertanggungjawab dalam masa 24 jam bekerja.</p>
+        </div><!-- /chat-scroll -->
+
+        <!-- Floating input - only shown on screen 4 -->
+        <div id="textInputBar" style="display:none; padding: 12px 16px; background: var(--surface); border-top: 1px solid var(--border); flex-shrink: 0;">
+            <div style="max-width: 680px; margin: 0 auto;">
+                <div class="chat-label">Aduan anda</div>
+                <div class="chat-input-wrap">
+                    <textarea class="chat-textarea" id="descTextarea" placeholder="cth: Lampu jalan mati dah 3 hari, bahaya untuk orang ramai lalu pada waktu malam..." rows="3"></textarea>
+                    <button class="chat-send" id="sendBtn" onclick="submitComplaint()">
+                        <span class="material-symbols-rounded">arrow_upward</span>
+                    </button>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon teal"><span class="material-symbols-rounded">visibility</span></div>
-                    <h3>Jejak Secara Langsung</h3>
-                    <p>Pantau setiap langkah tindakan terhadap aduan anda secara masa nyata dengan ID unik.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon green"><span class="material-symbols-rounded">verified</span></div>
-                    <h3>Penyelesaian Telus</h3>
-                    <p>Terima pemberitahuan penyelesaian lengkap dengan bukti tindakan yang telah diambil.</p>
+                <div class="input-meta">
+                    <div class="input-tag"><span class="material-symbols-rounded">auto_awesome</span>BAKPE.ai akan rangka aduan untuk anda</div>
                 </div>
             </div>
-        </main>
-
-        <!-- Footer -->
-        <footer class="footer">
-            <div class="footer-brand">eAduan Terengganu</div>
-            <p>Sistem Pengurusan Aduan Bersepadu Negeri Terengganu</p>
-            <p style="margin-top:6px;">&copy; 2026 Kerajaan Negeri Terengganu. Dikuasakan oleh <a href="https://neuramerge.com">Neuramerge</a>.</p>
-        </footer>
-
-    </div><!-- /page-wrap -->
-
-    <!-- Success Modal -->
-    <div class="modal-overlay" id="successModal">
-        <div class="modal">
-            <div class="modal-check">
-                <span class="material-symbols-rounded">check_circle</span>
-            </div>
-            <h2>Aduan Berjaya Dihantar!</h2>
-            <p>ID Aduan Anda:</p>
-            <div class="modal-id" id="modalId">EA-2026-04-00034</div>
-            <p style="color:#1d4ed8; font-weight:700; font-size:0.88rem; padding:12px; background:var(--blue-50); border-radius:10px; border:1px solid var(--blue-100); margin-bottom:20px;">
-                AMARAN: Sila SIMPAN (Screenshot) ID ini untuk menjejak status aduan anda.
-            </p>
-            <p style="margin-bottom:14px; color:var(--slate-500);">Atau terima salinan ID melalui:</p>
-            <div style="display:flex; gap:10px; justify-content:center; margin-bottom:24px;">
-                <button type="button" style="padding:10px 16px;border:1.5px solid #25D366;background:rgba(37,211,102,0.08);color:#128C7E;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:6px;font-weight:700;font-family:inherit;font-size:0.85rem;" onclick="alert('Pautan penjejakan telah dihantar ke WhatsApp anda.')">
-                    <span class="material-symbols-rounded" style="font-size:18px;">chat</span> WhatsApp
-                </button>
-                <button type="button" style="padding:10px 16px;border:1.5px solid var(--blue-300);background:var(--blue-50);color:var(--blue-700);border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:6px;font-weight:700;font-family:inherit;font-size:0.85rem;" onclick="navigator.clipboard.writeText(document.getElementById('modalId').textContent);this.textContent='Disalin!'">
-                    <span class="material-symbols-rounded" style="font-size:18px;">content_copy</span> Salin ID
-                </button>
-            </div>
-            <button class="btn-submit" onclick="closeModal()" style="max-width:180px;margin:0 auto;">Tutup</button>
         </div>
+
+    </div><!-- /chat-wrap -->
+
+    <!-- Bottom hint -->
+    <div class="bottom-hint">
+        BAKPE.ai &bull; Sistem Aduan Awam Terengganu &bull; Data dilindungi di bawah <a href="#">PDPA 2010</a>
     </div>
 
     <script>
-        // Tab switching
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-                btn.classList.add('active');
-                document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
-            });
-        });
+        let selectedCategory = '';
+        let selectedEmoji = '';
+        let geoDetected = false;
 
-        // Upload zone - client-side 10MB enforcement
-        const uploadZone = document.getElementById('uploadZone');
-        const fileInput = document.getElementById('fileInput');
-        uploadZone.addEventListener('click', () => fileInput.click());
-        uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.style.borderColor = 'var(--blue-400)'; });
-        uploadZone.addEventListener('dragleave', () => { uploadZone.style.borderColor = ''; });
-        uploadZone.addEventListener('drop', e => {
-            e.preventDefault();
-            uploadZone.style.borderColor = '';
-            handleFiles(e.dataTransfer.files);
-        });
-        fileInput.addEventListener('change', () => handleFiles(fileInput.files));
-        function handleFiles(files) {
-            const maxSize = 10 * 1024 * 1024; // 10MB
-            let oversized = [];
-            Array.from(files).forEach(f => { if (f.size > maxSize) oversized.push(f.name); });
-            if (oversized.length) {
-                alert(`Fail berikut melebihi 10MB dan tidak boleh dimuat naik:\n${oversized.join('\n')}`);
-                fileInput.value = '';
+        const scrollEl = document.getElementById('chatScroll');
+
+        function scrollToBottom() {
+            setTimeout(() => scrollEl.scrollTo({ top: scrollEl.scrollHeight, behavior: 'smooth' }), 80);
+        }
+
+        function setProgress(pct) {
+            document.getElementById('progressFill').style.width = pct + '%';
+        }
+
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            scrollToBottom();
+        }
+
+        /* ===== SCREEN 1 → 2: Category select ===== */
+        function selectCategory(name, emoji, key) {
+            selectedCategory = name;
+            selectedEmoji = emoji;
+
+            // Mark button selected
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+
+            // Update user bubble
+            document.getElementById('selectedEmoji').textContent = emoji;
+            document.getElementById('selectedCat').textContent = name;
+            document.getElementById('chipCat').textContent = name;
+
+            setProgress(25);
+
+            // Transition with typing delay
+            setTimeout(() => {
+                showScreen('screen2');
+                startGeo();
+            }, 350);
+        }
+
+        /* ===== GEO DETECTION ===== */
+        function startGeo() {
+            const geoText = document.querySelector('.geo-row .geo-text');
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        const lat = pos.coords.latitude.toFixed(4);
+                        const lon = pos.coords.longitude.toFixed(4);
+                        document.getElementById('geoCoords').textContent = lat + '°N, ' + lon + '°E';
+                        document.getElementById('mapLocCoords').textContent = lat + '° N, ' + lon + '° E';
+                        geoText.textContent = 'Lokasi dikesan';
+                        document.getElementById('geoBadge').textContent = 'GPS ✓';
+                        geoDetected = true;
+                    },
+                    () => {
+                        // Fallback mock
+                        document.getElementById('geoCoords').textContent = '5.3302°N, 103.1408°E';
+                        geoText.textContent = 'Lokasi anggaran (Kuala Terengganu)';
+                        document.getElementById('geoBadge').textContent = 'Anggaran';
+                        geoDetected = true;
+                    },
+                    { timeout: 5000 }
+                );
+            } else {
+                document.getElementById('geoCoords').textContent = '5.3302°N, 103.1408°E';
+                geoText.textContent = 'Lokasi anggaran';
+                geoDetected = true;
+            }
+        }
+
+        /* ===== FILE UPLOAD ===== */
+        document.getElementById('photoInput').addEventListener('change', function() {
+            const file = this.files[0];
+            if (!file) return;
+            if (file.size > 10 * 1024 * 1024) {
+                alert('Fail melebihi 10MB. Sila pilih fail yang lebih kecil.');
+                this.value = '';
                 return;
             }
-            const names = Array.from(files).map(f => f.name).join(', ');
-            uploadZone.querySelector('p').textContent = `✓ ${files.length} fail dipilih: ${names}`;
-            uploadZone.style.borderColor = 'var(--green-400)';
-            uploadZone.style.background = 'rgba(240,253,244,0.7)';
-        }
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const preview = document.getElementById('uploadPreview');
+                const img = document.getElementById('previewImg');
+                img.src = e.target.result;
+                preview.style.display = 'block';
+                document.getElementById('uploadArea').classList.add('has-file');
+                document.getElementById('uploadArea').querySelector('.upload-icon').textContent = '✅';
+                document.getElementById('uploadArea').querySelector('.upload-title').textContent = 'Gambar dipilih';
+                enableUploadContinue();
+            };
+            reader.readAsDataURL(file);
+        });
 
-        // Form submit
-        document.getElementById('aduanForm').addEventListener('submit', (e) => {
+        // Also enable drag-drop
+        const ua = document.getElementById('uploadArea');
+        ua.addEventListener('dragover', e => { e.preventDefault(); ua.style.borderColor = '#0066ff'; });
+        ua.addEventListener('dragleave', () => { ua.style.borderColor = ''; });
+        ua.addEventListener('drop', e => {
             e.preventDefault();
-            const id = 'EA-2026-' + String(Math.floor(Math.random() * 90000) + 10000);
-            document.getElementById('modalId').textContent = id;
-            document.getElementById('successModal').classList.add('show');
-            e.target.reset();
-            uploadZone.querySelector('p').textContent = 'Klik atau seret gambar/video ke sini';
-            uploadZone.style.borderColor = '';
-            uploadZone.style.background = '';
+            ua.style.borderColor = '';
+            const file = e.dataTransfer.files[0];
+            const dt = new DataTransfer();
+            dt.items.add(file);
+            document.getElementById('photoInput').files = dt.files;
+            document.getElementById('photoInput').dispatchEvent(new Event('change'));
         });
 
-        function closeModal() {
-            document.getElementById('successModal').classList.remove('show');
+        function enableUploadContinue() {
+            const btn = document.getElementById('btnContinueUpload');
+            btn.disabled = false;
+            btn.style.opacity = '1';
+            btn.style.cursor = 'pointer';
         }
 
-        // Tracker
-        document.getElementById('btnTrack').addEventListener('click', () => {
-            const val = document.getElementById('trackInput').value.trim();
-            if (!val) return;
-            document.getElementById('trackResult').innerHTML = `
-                <div class="result-header">
-                    <span class="result-id">${val}</span>
-                    <span class="result-status in-progress">Dalam Tindakan</span>
-                </div>
-                <div class="timeline">
-                    <div class="timeline-item done">
-                        <div class="timeline-dot done"><span class="material-symbols-rounded">check</span></div>
-                        <div class="timeline-content">
-                            <h4>Aduan Diterima</h4>
-                            <p>14 April 2026, 09:15 MYT</p>
-                            <span class="timeline-badge done-badge">Selesai</span>
-                        </div>
-                    </div>
-                    <div class="timeline-item done">
-                        <div class="timeline-dot done"><span class="material-symbols-rounded">check</span></div>
-                        <div class="timeline-content">
-                            <h4>Disahkan & Ditugaskan ke MBKT</h4>
-                            <p>14 April 2026, 11:30 MYT - Majlis Bandaraya Kuala Terengganu</p>
-                            <span class="timeline-badge done-badge">Selesai</span>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-dot active"><span class="material-symbols-rounded">engineering</span></div>
-                        <div class="timeline-content">
-                            <h4>Dalam Tindakan</h4>
-                            <p>15 April 2026 - Pasukan teknikal sedang di lokasi untuk pemeriksaan</p>
-                            <span class="timeline-badge progress">Sedang diproses</span>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-dot pending"><span class="material-symbols-rounded">hourglass_empty</span></div>
-                        <div class="timeline-content">
-                            <h4>Penyelesaian</h4>
-                            <p>Menunggu laporan tindakan</p>
-                        </div>
-                    </div>
-                </div>
-            `;
-        });
+        /* ===== SCREEN 2 → 3: Go to map ===== */
+        function goToMapScreen() {
+            setProgress(60);
+            showScreen('screen3');
+        }
 
-        // Step indicator animation
-        const formSections = document.querySelectorAll('.form-section');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const idx = [...formSections].indexOf(entry.target);
-                    document.querySelectorAll('.step-item').forEach((s, i) => {
-                        s.classList.remove('active', 'done');
-                        if (i < idx) s.classList.add('done');
-                        if (i === idx) s.classList.add('active');
-                    });
-                }
-            });
-        }, { threshold: 0.5 });
-        formSections.forEach(s => observer.observe(s));
+        function goBack2() {
+            setProgress(25);
+            showScreen('screen2');
+        }
 
-        // Enter key on tracker
-        document.getElementById('trackInput').addEventListener('keydown', e => {
-            if (e.key === 'Enter') document.getElementById('btnTrack').click();
+        /* ===== SCREEN 3 → 4: Go to text ===== */
+        function goToTextScreen() {
+            setProgress(80);
+            showScreen('screen4');
+            document.getElementById('textInputBar').style.display = 'block';
+            setTimeout(() => document.getElementById('descTextarea').focus(), 300);
+        }
+
+        /* ===== SCREEN 4 → 5: Submit ===== */
+        function submitComplaint() {
+            const desc = document.getElementById('descTextarea').value.trim();
+            if (!desc || desc.length < 5) {
+                document.getElementById('descTextarea').focus();
+                document.getElementById('descTextarea').style.borderColor = '#ef4444';
+                return;
+            }
+            setProgress(100);
+            const id = 'BAKPE-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random() * 90000) + 10000);
+            document.getElementById('successId').textContent = id;
+            document.getElementById('textInputBar').style.display = 'none';
+            showScreen('screen5');
+        }
+
+        function copyId() {
+            const id = document.getElementById('successId').textContent;
+            navigator.clipboard.writeText(id).catch(() => {});
+            const btn = event.currentTarget;
+            const orig = btn.innerHTML;
+            btn.innerHTML = '<span class="material-symbols-rounded">check</span> Disalin!';
+            setTimeout(() => btn.innerHTML = orig, 2000);
+        }
+
+        function resetAll() {
+            setProgress(0);
+            document.getElementById('textInputBar').style.display = 'none';
+            document.getElementById('descTextarea').value = '';
+            document.getElementById('photoInput').value = '';
+            document.getElementById('uploadPreview').style.display = 'none';
+            document.getElementById('uploadArea').classList.remove('has-file');
+            document.getElementById('uploadArea').querySelector('.upload-icon').textContent = '📷';
+            document.getElementById('uploadArea').querySelector('.upload-title').textContent = 'Ambil gambar / pilih dari galeri';
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('selected'));
+            const btn = document.getElementById('btnContinueUpload');
+            btn.disabled = true;
+            btn.style.opacity = '0.4';
+            btn.style.cursor = 'not-allowed';
+            showScreen('screen1');
+            scrollEl.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Enter key to submit text
+        document.getElementById('descTextarea').addEventListener('keydown', e => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                submitComplaint();
+            }
         });
     </script>
 </body>
